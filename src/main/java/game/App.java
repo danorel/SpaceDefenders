@@ -1,6 +1,7 @@
 package game;
 
 import game.tools.ButtonConstructor;
+import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -16,7 +17,7 @@ public class App extends Application {
 
     private Stage stage;
     private Scene game, menu, main;
-    private Group gameGroup, menuGroup, mainGroup;
+    private Group menuGroup, mainGroup;
     private Pane root;
 
     private Sprite player;
@@ -49,13 +50,6 @@ public class App extends Application {
                 Preferences.WINDOW_HEIGHT
         );
 
-        gameGroup = new Group();
-        game = new Scene(
-                gameGroup,
-                Preferences.WINDOW_WIDTH,
-                Preferences.WINDOW_HEIGHT
-        );
-
         menuGroup = new Group();
         menu = new Scene(
                 menuGroup,
@@ -68,6 +62,10 @@ public class App extends Application {
                 Preferences.WINDOW_WIDTH,
                 Preferences.WINDOW_HEIGHT
         );
+
+        game = new Scene(
+               root
+        );
     }
 
     private void initSprites(){
@@ -79,10 +77,10 @@ public class App extends Application {
                 Preferences.SpriteType.PLAYER.toString(),
                 Color.GREEN
         );
+        root.getChildren().add(player);
         playerRockets = new ArrayList<>();
         aliens        = new ArrayList<>();
         aliensRockets = new ArrayList<>();
-        gameGroup.getChildren().addAll(player);
     }
 
     private void initKeyEvents(){
@@ -106,7 +104,7 @@ public class App extends Application {
                     try {
                         Sprite shot = player.shoot();
                         playerRockets.add(shot);
-                        gameGroup
+                        root
                                 .getChildren()
                                 .add(
                                       shot
@@ -144,34 +142,42 @@ public class App extends Application {
     }
 
     private void run(){
-        while(!Preferences.isGameWon){
-            /*
-                Clearing up the array lists with game data before starting each round
-             */
-            aliens        = new ArrayList<>();
-            aliensRockets = new ArrayList<>();
-            playerRockets = new ArrayList<>();
-            /*
-                Defining the position of the enemies on the board and adding them there
-             */
-            startNextLevel();
-            gameGroup.getChildren().addAll(aliens);
-            /*
-                Starting the game loop
-             */
-            while(!Preferences.isRoundWon){
+        AnimationTimer timer = new AnimationTimer() {
+            @Override
+            public void handle(long now) {
                 update();
-                if(aliens.size() == 0){
-                    Preferences.isRoundWon = true;
-                }
-                if(!player.isAlive()){
-                    break;
-                }
             }
-            if(Preferences.isRoundWon && Preferences.CURRENT_ROUND == Preferences.MAX_ROUND){
-                Preferences.isGameWon = true;
-            }
-        }
+        };
+        timer.start();
+
+        startNextLevel();
+//        while(!Preferences.isGameWon){
+//            /*
+//                Clearing up the array lists with game data before starting each round
+//             */
+//            aliens        = new ArrayList<>();
+//            aliensRockets = new ArrayList<>();
+//            playerRockets = new ArrayList<>();
+//            /*
+//                Defining the position of the enemies on the board and adding them there
+//             */
+//
+//            /*
+//                Starting the game loop
+//             */
+//            while(!Preferences.isRoundWon){
+//                update();
+//                if(aliens.size() == 0){
+//                    Preferences.isRoundWon = true;
+//                }
+//                if(!player.isAlive()){
+//                    break;
+//                }
+//            }
+//            if(Preferences.isRoundWon && Preferences.CURRENT_ROUND == Preferences.MAX_ROUND){
+//                Preferences.isGameWon = true;
+//            }
+//        }
     }
 
     private void update(){
@@ -187,9 +193,12 @@ public class App extends Application {
             Make the alien shoot, generated above
          */
         try {
-            Sprite shot = aliens.get(shooting).shoot();
-            aliensRockets.add(shot);
-            gameGroup.getChildren().add(shot);
+            int chance = (int) (Math.random() * 100);
+            if(chance > 97){
+                Sprite shot = aliens.get(shooting).shoot();
+                aliensRockets.add(shot);
+                root.getChildren().add(shot);
+            }
         } catch (AttributeInUseException exception) {
             exception.printStackTrace();
         }
@@ -228,11 +237,6 @@ public class App extends Application {
                 exception.printStackTrace();
             }
         });
-        try {
-            Thread.sleep(Preferences.ALIEN_MOVE_DELAY);
-        } catch (InterruptedException exception) {
-            exception.printStackTrace();
-        }
         root.getChildren().removeIf(n -> {
             Sprite sprite = (Sprite) n;
             return !sprite.isAlive();
@@ -240,15 +244,29 @@ public class App extends Application {
     }
 
     private void startNextLevel(){
-        for(int alien = 0; alien < Preferences.ALIEN_AMOUNT_PER_LEVEL[Preferences.CURRENT_ROUND]; alien++){
-            aliens.add(new Sprite(
-                    10 + Preferences.ALIEN_WIDTH,
-                    10 + Preferences.ALIEN_HEIGHT,
-                    Preferences.ALIEN_WIDTH,
-                    Preferences.ALIEN_HEIGHT,
-                    Preferences.SpriteType.ALIEN.toString(),
-                    Color.DARKRED)
+        if(Preferences.CURRENT_ROUND + 1 == 1){
+            aliens.add(
+                    new Sprite(
+                        Preferences.PLAYER_START_X,
+                        10 + Preferences.ALIEN_HEIGHT,
+                        Preferences.ALIEN_WIDTH,
+                        Preferences.ALIEN_HEIGHT,
+                        Preferences.SpriteType.ALIEN.toString(),
+                        Color.DARKRED)
             );
+            root.getChildren().addAll(aliens);
+        }
+        if(Preferences.CURRENT_ROUND + 1 == 2){
+
+        }
+        if(Preferences.CURRENT_ROUND + 1 == 3){
+
+        }
+        if(Preferences.CURRENT_ROUND + 1 == 4){
+
+        }
+        if(Preferences.CURRENT_ROUND + 1 == 5){
+
         }
     }
 

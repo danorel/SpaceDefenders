@@ -19,7 +19,7 @@ public class Preferences {
     public static final double ALIEN_WIDTH    = 50;
     public static final double ALIEN_HEIGHT   = 50;
     public static double ALIEN_VELOCITY = 30;
-    static final int[] ALIEN_AMOUNT_PER_LEVEL = {10, 15, 20, 25, 1};
+    static final int[] ALIEN_AMOUNT_PER_LEVEL = {1, 2, 3, 4, 5};
     static final int ALIEN_MOVE_DELAY         = 4000;
     /*
         Player options

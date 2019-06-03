@@ -1,14 +1,9 @@
 package game;
 
-import game.Preferences;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-
 import javax.naming.directory.AttributeInUseException;
-import java.awt.*;
 
 public class Sprite extends Rectangle
 {
@@ -65,7 +60,7 @@ public class Sprite extends Rectangle
         if(type.toString().equals(Preferences.SpriteType.PLAYER_ROCKET.toString())) {
             setTranslateY(getTranslateY() - Preferences.ROCKET_VELOCITY);
             if (getTranslateY() < 0) {
-
+                isAlive = false;
             }
         } else {
             throw new AttributeInUseException(
@@ -78,7 +73,7 @@ public class Sprite extends Rectangle
         if(type.toString().equals(Preferences.SpriteType.ALIEN_ROCKET.toString())) {
             setTranslateY(getTranslateY() + Preferences.ROCKET_VELOCITY);
             if (getTranslateY() > Preferences.WINDOW_HEIGHT - Preferences.ROCKET_HEIGHT) {
-
+                isAlive = false;
             }
         } else {
             throw new AttributeInUseException(
@@ -103,7 +98,7 @@ public class Sprite extends Rectangle
                     getTranslateY() - Preferences.ROCKET_HEIGHT,
                     Preferences.ROCKET_WIDTH,
                     Preferences.ROCKET_HEIGHT,
-                    Preferences.SpriteType.ALIEN_ROCKET.toString(),
+                    Preferences.SpriteType.PLAYER_ROCKET.toString(),
                     Color.BLACK
             );
         } else {
@@ -123,14 +118,6 @@ public class Sprite extends Rectangle
 
     public boolean intersects(Sprite another){
         return another.getBoundary().intersects( this.getBoundary() );
-    }
-
-    public double getPositionX(){
-        return positionX;
-    }
-
-    public double getPositionY() {
-        return positionY;
     }
 
     public boolean isAlive() {
