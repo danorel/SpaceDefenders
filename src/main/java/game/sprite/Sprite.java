@@ -1,6 +1,6 @@
-package game;
+package game.sprite;
 
-import javafx.geometry.Rectangle2D;
+import game.Preferences;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javax.naming.directory.AttributeInUseException;
@@ -10,14 +10,17 @@ public class Sprite extends Rectangle
     private boolean isAlive  = true;
     private double positionX = 0;
     private double positionY = 0;
+    private double width     = 0;
+    private double height    = 0;
     private StringBuilder type;
 
     public Sprite(double positionX, double positionY, double width, double height, String type, Color color){
         super(width, height, color);
-        this.type = new StringBuilder(type);
-        this.positionX = positionX;
-        this.positionY = positionY;
-
+        this.type       = new StringBuilder(type);
+        this.positionX  = positionX;
+        this.positionY  = positionY;
+        this.width      = width;
+        this.height     = height;
         setTranslateX(this.positionX);
         setTranslateY(this.positionY);
     }
@@ -70,7 +73,7 @@ public class Sprite extends Rectangle
     }
 
     public void moveDown() throws AttributeInUseException {
-        if(type.toString().equals(Preferences.SpriteType.ALIEN_ROCKET.toString())) {
+        if(type.toString().equals(Preferences.SpriteType.ALIEN_ROCKET.toString()) || type.toString().equals(Preferences.SpriteType.METEOR.toString())) {
             setTranslateY(getTranslateY() + Preferences.ROCKET_VELOCITY);
             if (getTranslateY() > Preferences.WINDOW_HEIGHT - Preferences.ROCKET_HEIGHT) {
                 isAlive = false;
@@ -112,12 +115,8 @@ public class Sprite extends Rectangle
         isAlive = false;
     }
 
-    public Rectangle2D getBoundary(){
-        return new Rectangle2D(positionX, positionY, Preferences.ALIEN_WIDTH, Preferences.ALIEN_HEIGHT);
-    }
-
     public boolean intersects(Sprite another){
-        return another.getBoundary().intersects( this.getBoundary() );
+        return another.getBoundsInParent().intersects( this.getBoundsInParent());
     }
 
     public boolean isAlive() {
