@@ -170,7 +170,7 @@ public class App extends Application {
             /*
             while (!Preferences.isGameWon) {
                 if (!run()) {
-                    displayLossWindow();
+                    DLW();
                 } else {
                     if (Preferences.CURRENT_ROUND == Preferences.MAX_ROUND) {
                         Preferences.isGameWon = true;
@@ -203,7 +203,7 @@ public class App extends Application {
             public void handle(long now) {
                 update();
                 if(Preferences.isRoundWon){
-                    displayWinWindow();
+                    DWW();
                 }
             }
         };
@@ -242,7 +242,7 @@ public class App extends Application {
                     sprite.die();
                     aliensRockets.remove(sprite);
                     clear();
-                    displayLossWindow();
+                    DLW();
                 }
             } catch (AttributeInUseException exception) {
                 exception.printStackTrace();
@@ -297,24 +297,26 @@ public class App extends Application {
 
     private void startNextLevel() {
         if (Preferences.CURRENT_ROUND + 1 == 1) {
-            addRoundOneAliensLocation();
+            initFirstAliensStrategy();
         }
         if (Preferences.CURRENT_ROUND + 1 == 2) {
-            addRoundTwoAliensLocation();
+            initSecondAliensStrategy();
         }
         if (Preferences.CURRENT_ROUND + 1 == 3) {
-            addRoundThreeAliensLocation();
+            initThirdAliensStrategy();
         }
         if (Preferences.CURRENT_ROUND + 1 == 4) {
-            addRoundFourAliensLocation();
+            initFourthAliensStrategy();
         }
         if (Preferences.CURRENT_ROUND + 1 == 5) {
-            addRoundFiveAliensLocation();
+            initFifthAliensStrategy();
         }
         canvas.getChildren().addAll(aliens);
     }
-
-    private void addRoundOneAliensLocation() {
+    /*
+        Initializing the first aliens strategy
+    */
+    private void initFirstAliensStrategy() {
         for (int alien = 0, STEP = Preferences.WINDOW_WIDTH / 6; alien < Preferences.ALIEN_AMOUNT_PER_LEVEL[Preferences.CURRENT_ROUND]; alien++, STEP += Preferences.WINDOW_WIDTH / 6) {
             aliens.add(
                     new Sprite(
@@ -327,8 +329,10 @@ public class App extends Application {
             );
         }
     }
-
-    private void addRoundTwoAliensLocation() {
+    /*
+        Initializing the second aliens strategy
+    */
+    private void initSecondAliensStrategy() {
         for (int alien = 0, STEP = Preferences.WINDOW_WIDTH / 6; alien < Preferences.ALIEN_AMOUNT_PER_LEVEL[Preferences.CURRENT_ROUND] / 2; alien++, STEP += Preferences.WINDOW_WIDTH / 6) {
             aliens.add(
                     new Sprite(
@@ -361,8 +365,10 @@ public class App extends Application {
                         Color.DARKRED)
         );
     }
-
-    private void addRoundThreeAliensLocation() {
+    /*
+        Initializing the third aliens strategy
+    */
+    private void initThirdAliensStrategy() {
         for (int alien = 0, STEP = Preferences.WINDOW_WIDTH / 6; alien < Preferences.ALIEN_AMOUNT_PER_LEVEL[Preferences.CURRENT_ROUND] / 2 - 1; alien++, STEP += Preferences.WINDOW_WIDTH / 6) {
             aliens.add(
                     new Sprite(
@@ -397,8 +403,10 @@ public class App extends Application {
             );
         }
     }
-
-    private void addRoundFourAliensLocation() {
+    /*
+        Initializing the fourth aliens strategy
+     */
+    private void initFourthAliensStrategy() {
         for (int alien = 0, STEP = Preferences.WINDOW_WIDTH / 4; alien < Preferences.ALIEN_AMOUNT_PER_LEVEL[Preferences.CURRENT_ROUND]; alien++, STEP += Preferences.WINDOW_WIDTH / 4) {
             aliens.add(
                     new Sprite(
@@ -411,8 +419,10 @@ public class App extends Application {
             );
         }
     }
-
-    private void addRoundFiveAliensLocation() {
+    /*
+        Initializing the fifth aliens strategy
+     */
+    private void initFifthAliensStrategy() {
         aliens.add(
                 new Sprite(
                         Preferences.ALIEN_START_X - Preferences.ALIEN_WIDTH / 2,
@@ -424,8 +434,10 @@ public class App extends Application {
                 )
         );
     }
-
-    private void displayWinWindow() {
+    /*
+        Display Win Window
+     */
+    private void DWW() {
         Button replay = ButtonConstructor.construct(
                 "Replay",
                 Preferences.MAIN_BUTTON_WIDTH,
@@ -438,11 +450,20 @@ public class App extends Application {
             stage.setScene(game);
             run();
         });
-        winPane.getChildren().add(replay);
+        Button toMenu = ButtonConstructor.construct(
+                "Back to Menu",
+                Preferences.MAIN_BUTTON_WIDTH,
+                Preferences.MAIN_BUTTON_HEIGHT,
+                Preferences.MAIN_BUTTON_X,
+                Preferences.MAIN_BUTTON_Y + Preferences.MAIN_BUTTON_DIFFERENCE);
+        toMenu.setOnAction(event -> stage.setScene(main));
+        winPane.getChildren().addAll(replay, toMenu);
         stage.setScene(loss);
     }
-
-    private void displayLossWindow() {
+    /*
+        Display Loss Window
+     */
+    private void DLW() {
         Button replay = ButtonConstructor.construct(
                 "Replay",
                 Preferences.MAIN_BUTTON_WIDTH,
@@ -455,7 +476,14 @@ public class App extends Application {
             stage.setScene(game);
             run();
         });
-        winPane.getChildren().add(replay);
+        Button toMenu = ButtonConstructor.construct(
+                "Back to Menu",
+                Preferences.MAIN_BUTTON_WIDTH,
+                Preferences.MAIN_BUTTON_HEIGHT,
+                Preferences.MAIN_BUTTON_X,
+                Preferences.MAIN_BUTTON_Y + Preferences.MAIN_BUTTON_DIFFERENCE);
+        toMenu.setOnAction(event -> stage.setScene(main));
+        winPane.getChildren().addAll(replay, toMenu);
         stage.setScene(win);
     }
 
