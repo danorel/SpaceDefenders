@@ -5,15 +5,13 @@ import game.Preferences;
 import game.sprite.AlienStrategy;
 import game.sprite.Sprite;
 import javafx.animation.AnimationTimer;
-import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
+
 import javafx.scene.layout.BorderPane;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
+
 import javafx.stage.Stage;
-import sun.dc.pr.PRError;
+
 
 import javax.naming.directory.AttributeInUseException;
 import java.net.MalformedURLException;
@@ -35,7 +33,7 @@ public class GameWindow extends Scene implements WindowController {
     }
 
     @Override
-    public void display(Stage primaryStage, List<Scene> scenes){
+    public void display(Stage primaryStage, List<Scene> scenes) {
 
         try {
             this.getStylesheets().addAll(
@@ -76,8 +74,8 @@ public class GameWindow extends Scene implements WindowController {
                     units
                             .forEach(unit -> {
                                 if (unit.getType().equals(Preferences.SpriteType.PLAYER.toString())
-                                ){
-                                    if(Preferences.PLAYER_VELOCITY > 0) {
+                                ) {
+                                    if (Preferences.PLAYER_VELOCITY > 0) {
                                         Preferences.PLAYER_VELOCITY = -Preferences.PLAYER_VELOCITY;
                                     }
                                 }
@@ -87,9 +85,9 @@ public class GameWindow extends Scene implements WindowController {
                     units
                             .forEach(unit -> {
                                 if (unit.getType().equals(Preferences.SpriteType.PLAYER.toString())
-                                ){
-                                    if(Preferences.PLAYER_VELOCITY < 0){
-                                        Preferences.PLAYER_VELOCITY = - Preferences.PLAYER_VELOCITY;
+                                ) {
+                                    if (Preferences.PLAYER_VELOCITY < 0) {
+                                        Preferences.PLAYER_VELOCITY = -Preferences.PLAYER_VELOCITY;
                                     }
                                 }
                             });
@@ -98,9 +96,9 @@ public class GameWindow extends Scene implements WindowController {
                     units
                             .forEach(unit -> {
                                 if (unit.getType().equals(Preferences.SpriteType.PLAYER.toString())
-                                ){
+                                ) {
                                     try {
-                                        Sprite shot = unit.shoot();
+                                        Sprite shot = unit.fire();
                                         units.add(shot);
                                         root.getChildren().add(shot);
                                     } catch (AttributeInUseException exception) {
@@ -131,37 +129,59 @@ public class GameWindow extends Scene implements WindowController {
 
     private void update(Stage primaryStage, List<Scene> scenes) {
         /*
-            Generating the index of the alien, who will make a shot
-         */
-        int shooting = (int) (Math.random() * Preferences.ALIEN_AMOUNT_PER_LEVEL[Preferences.CURRENT_ROUND]);
-        /*
             Moving all the aliens line
          */
         units
                 .forEach(unit -> {
-                    if(unit.getType().equals(Preferences.SpriteType.ALIEN.toString())){
+                    if (unit.getType().equals(Preferences.SpriteType.ALIEN.toString())) {
                         unit.move();
                     }
                 });
 
         units
                 .forEach(unit -> {
-                    if(unit.getType().equals(Preferences.SpriteType.PLAYER.toString())){
+                    if (unit.getType().equals(Preferences.SpriteType.PLAYER.toString())) {
                         unit.move();
                     }
                 });
         /*
-            Make the alien shoot, generated above
+            Meteor appearing chance
+         */
+        int meteorAppearingChance = (int) (Math.random() * Preferences.METEOR_APPEAR_RANGE);
+        if (meteorAppearingChance <= Preferences.METEOR_APPEAR_CHANCE) {
+            Sprite meteor = new Sprite(
+                    (int) (Math.random() * Preferences.WINDOW_WIDTH),
+                    -Preferences.METEOR_HEIGHT,
+                    Preferences.METEOR_WIDTH,
+                    Preferences.METEOR_HEIGHT,
+                    Preferences.SpriteType.METEOR.toString(),
+                    "file:resources/models/effects/meteor.png"
+            );
+            units.add(meteor);
+            root.getChildren().add(meteor);
+        }
+        units
+                .forEach(unit -> {
+                    if(unit.getType().equals(Preferences.SpriteType.METEOR.toString())){
+                        unit.moveDown();
+                    }
+                });
+        /*
+            Generating the index of the alien, who will make a shot
+         */
+        int alienShootingChance = (int) (Math.random() * Preferences.ALIEN_AMOUNT_PER_LEVEL[Preferences.CURRENT_ROUND]);
+        /*
+            Make the alien fire, generated above
          */
         try {
-            int chance = (int) (Math.random() * 100);
-            if (chance <= Preferences.ALIEN_SHOOT_CHANCE) {
+            int chance = (int) (Math.random() * Preferences.ROCKET_LAUNCH_CHANCE_RANGE);
+            if (chance <= Preferences.ROCKET_LAUNCH_CHANCE) {
                 Sprite shot = units
                         .stream()
                         .filter(unit -> unit.getType().equals(Preferences.SpriteType.ALIEN.toString()))
                         .collect(Collectors.toList())
-                        .get(shooting)
-                        .shoot();
+                        .get(alienShootingChance)
+                        .fire();
                 units.add(shot);
                 root.getChildren().add(shot);
             }
@@ -170,16 +190,12 @@ public class GameWindow extends Scene implements WindowController {
         }
         units
                 .forEach(unit -> {
-                    if(unit.getType().equals(Preferences.SpriteType.ALIEN_ROCKET.toString())){
-                        try {
-                            unit.moveDown();
-                        } catch (AttributeInUseException exception) {
-                            exception.printStackTrace();
-                        }
+                    if (unit.getType().equals(Preferences.SpriteType.ALIEN_ROCKET.toString())) {
+                        unit.moveDown();
                         units
                                 .forEach(hero -> {
-                                    if(hero.getType().equals(Preferences.SpriteType.PLAYER.toString())){
-                                        if(unit.intersects(hero)){
+                                    if (hero.getType().equals(Preferences.SpriteType.PLAYER.toString())) {
+                                        if (unit.intersects(hero)) {
                                             hero.die();
                                             unit.die();
                                             units.remove(hero);
@@ -192,7 +208,7 @@ public class GameWindow extends Scene implements WindowController {
                                     }
                                 });
                     }
-                    if(unit.getType().equals(Preferences.SpriteType.PLAYER_ROCKET.toString())){
+                    if (unit.getType().equals(Preferences.SpriteType.PLAYER_ROCKET.toString())) {
                         try {
                             unit.moveUp();
                         } catch (AttributeInUseException exception) {
@@ -200,8 +216,8 @@ public class GameWindow extends Scene implements WindowController {
                         }
                         units
                                 .forEach(alien -> {
-                                    if(alien.getType().equals(Preferences.SpriteType.ALIEN.toString()) || alien.getType().equals(Preferences.SpriteType.ALIEN_ROCKET.toString())){
-                                        if(unit.intersects(alien)){
+                                    if (alien.getType().equals(Preferences.SpriteType.ALIEN.toString()) || alien.getType().equals(Preferences.SpriteType.ALIEN_ROCKET.toString())) {
+                                        if (unit.intersects(alien)) {
                                             alien.die();
                                             unit.die();
                                             units.remove(alien);
@@ -210,7 +226,7 @@ public class GameWindow extends Scene implements WindowController {
                                                     .stream()
                                                     .filter(specie -> specie.getType().equals(Preferences.SpriteType.ALIEN.toString()))
                                                     .count();
-                                            if(aliensAmount == 0){
+                                            if (aliensAmount == 0) {
                                                 Preferences.isRoundWon = true;
                                             }
                                         }
@@ -219,8 +235,28 @@ public class GameWindow extends Scene implements WindowController {
                     }
                 });
 
-        if(Preferences.isRoundWon){
-            if(Preferences.CURRENT_ROUND == Preferences.MAX_ROUND){
+        units
+                .forEach(unit -> {
+                    if(unit.getType().equals(Preferences.SpriteType.METEOR.toString())){
+                        units.forEach(sprite -> {
+                            if(sprite.getType().equals(Preferences.SpriteType.PLAYER.toString())){
+                                if(unit.intersects(sprite)){
+                                    sprite.die();
+                                    unit.die();
+                                    units.remove(sprite);
+                                    units.remove(unit);
+                                    clearGameWindow();
+                                    timer.stop();
+                                    ((LossWindow) scenes.get(1)).display(primaryStage, scenes);
+                                    primaryStage.setScene(scenes.get(1));
+                                }
+                            }
+                        });
+                    }
+                });
+
+        if (Preferences.isRoundWon) {
+            if (Preferences.CURRENT_ROUND == Preferences.MAX_ROUND) {
                 Preferences.isGameWon = true;
 
             } else {
@@ -239,7 +275,7 @@ public class GameWindow extends Scene implements WindowController {
             Preferences.isRoundWon = false;
         }
 
-        if(Preferences.isGameWon){
+        if (Preferences.isGameWon) {
             ((WinWindow) scenes.get(7)).display(primaryStage, scenes);
             primaryStage.setScene(scenes.get(7));
             Preferences.isGameWon = false;

@@ -4,8 +4,8 @@ import javafx.scene.image.Image;
 
 public class Preferences {
     /*
-        Main window parameters
-     */
+            Main window parameters
+         */
     static final String TITLE = "Space Defenders";
     public static final int WINDOW_WIDTH = 640;
     public static final int WINDOW_HEIGHT = 480;
@@ -24,10 +24,6 @@ public class Preferences {
     public static final int[] ALIEN_AMOUNT_PER_LEVEL  = {5, 10, 12, 3, 1};
     public static final int ALIEN_START_X = (int) (WINDOW_WIDTH / 2 - ALIEN_WIDTH / 2);
     /*
-        The chance of alien shooting (3/100)
-     */
-    public static final int ALIEN_SHOOT_CHANCE = 3;
-    /*
         Player options
      */
     public static final double PLAYER_WIDTH    = 35;
@@ -36,25 +32,27 @@ public class Preferences {
     /*
         Rocket options
      */
-    public static final int ROCKET_WIDTH       = 5;
-    public static final int ROCKET_HEIGHT      = 20;
-    public static final double ROCKET_VELOCITY = 5;
-    public static final int ROCKET_LAUNCH_CHANCE    = 5;
+    public static final int ROCKET_WIDTH               = 5;
+    public static final int ROCKET_HEIGHT              = 20;
+    public static final double ROCKET_VELOCITY         = 5;
+    public static final int ROCKET_LAUNCH_CHANCE       = 5;
     public static final int ROCKET_LAUNCH_CHANCE_RANGE = 100;
     /*
         Meteor parameters
      */
-    public static final double METEOR_VELOCITY = 3;
+    public static final double METEOR_WIDTH            = 50;
+    public static final int METEOR_HEIGHT              = 50;
+    public static final double METEOR_VELOCITY         = 3;
     /*
        The chance of meteor flying (5/1000)
     */
-    public static final int METEOR_APPEAR_CHANCE    = 5;
-    public static final int METEOR_APPEAR_RANGE     = 1000;
+    public static final int METEOR_APPEAR_CHANCE       = 1;
+    public static final int METEOR_APPEAR_RANGE        = 100;
     /*
         Main panel buttons and location
      */
-    public static final int MAIN_BUTTON_WIDTH         = 220;
-    public static final int MAIN_BUTTON_HEIGHT        = 30;
+    public static final int MAIN_BUTTON_WIDTH          = 220;
+    public static final int MAIN_BUTTON_HEIGHT         = 30;
     public static final int MAIN_BUTTON_DIFFERENCE = WINDOW_HEIGHT / 6;
     public static final int MAIN_BUTTON_X = (WINDOW_WIDTH - MAIN_BUTTON_WIDTH) / 2;
     public static final int MAIN_BUTTON_Y = (WINDOW_WIDTH / 5);

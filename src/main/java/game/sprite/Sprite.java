@@ -62,20 +62,23 @@ public class Sprite extends ImageView
         }
     }
 
-    public void moveDown() throws AttributeInUseException {
-        if(type.toString().equals(Preferences.SpriteType.ALIEN_ROCKET.toString()) || type.toString().equals(Preferences.SpriteType.METEOR.toString())) {
+    public void moveDown() {
+        if(type.toString().equals(Preferences.SpriteType.ALIEN_ROCKET.toString())) {
             setTranslateY(getTranslateY() + Preferences.ROCKET_VELOCITY);
             if (getTranslateY() > Preferences.WINDOW_HEIGHT - Preferences.ROCKET_HEIGHT) {
                 isAlive = false;
             }
-        } else {
-            throw new AttributeInUseException(
-                    "Error! This unit cannot use move up function. Try another one!"
-            );
+        }
+
+        if(type.toString().equals(Preferences.SpriteType.METEOR.toString())){
+            setTranslateY(getTranslateY() + Preferences.METEOR_VELOCITY);
+            if (getTranslateY() > Preferences.WINDOW_HEIGHT - Preferences.METEOR_HEIGHT) {
+                isAlive = false;
+            }
         }
     }
 
-    public Sprite shoot() throws AttributeInUseException {
+    public Sprite fire() throws AttributeInUseException {
         if(type.toString().equals(Preferences.SpriteType.ALIEN.toString())){
             return new Sprite(
                     getTranslateX() + Preferences.ALIEN_WIDTH / 2 - Preferences.ROCKET_WIDTH / 2,
@@ -96,7 +99,7 @@ public class Sprite extends ImageView
             );
         } else {
             throw new AttributeInUseException(
-                    "Error! This unit cannot use the shoot function. Try with another one."
+                    "Error! This unit cannot use the fire function. Try with another one."
             );
         }
     }
