@@ -11,6 +11,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.util.List;
@@ -21,7 +22,7 @@ public class LossWindow extends Scene implements WindowController {
     private Label failed;
 
     public LossWindow(Parent root, double width, double height) {
-        super(root, width, height);
+        super(root, width, height, Color.rgb(0, 0, 255-225));
         this.root = (Group) root;
     }
 
@@ -55,6 +56,14 @@ public class LossWindow extends Scene implements WindowController {
                 Preferences.MAIN_BUTTON_X,
                 Preferences.MAIN_BUTTON_Y + Preferences.MAIN_BUTTON_DIFFERENCE);
         toMainMenu.setOnAction(event -> {
+            scenes.set(
+                    2,
+                    new MainWindow(
+                            new Group(),
+                            Preferences.WINDOW_WIDTH,
+                            Preferences.WINDOW_HEIGHT
+                    )
+            );
             ((MainWindow) scenes.get(2)).display(primaryStage, scenes);
             primaryStage.setScene(scenes.get(2));
         });
@@ -66,6 +75,7 @@ public class LossWindow extends Scene implements WindowController {
         failed = new Label(
                 "", new ImageView(image)
         );
+        failed.setLayoutX(60);
 
         root.getChildren().addAll(
                 failed,
@@ -79,17 +89,16 @@ public class LossWindow extends Scene implements WindowController {
         setOnKeyPressed(event -> {
             switch (event.getCode()){
                 case ENTER:
-                    GameWindow GW = new GameWindow(
-                            new BorderPane(),
-                            Preferences.WINDOW_WIDTH,
-                            Preferences.WINDOW_HEIGHT
+                    scenes.set(
+                            0,
+                            new GameWindow(
+                                    new BorderPane(),
+                                    Preferences.WINDOW_WIDTH,
+                                    Preferences.WINDOW_HEIGHT
+                            )
                     );
-                    scenes.set(0, GW);
-                    GW.display(
-                            primaryStage,
-                            scenes
-                    );
-                    primaryStage.setScene(GW);
+                    ((GameWindow) scenes.get(0)).display(primaryStage, scenes);
+                    primaryStage.setScene(scenes.get(0));
                     break;
                 case ESCAPE:
                     ((MainWindow) scenes.get(2)).display(primaryStage, scenes);

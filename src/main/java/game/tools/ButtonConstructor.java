@@ -7,7 +7,7 @@ public class ButtonConstructor {
         Button button = new Button(title);
         button.setDefaultButton(true);
         button.setPrefSize(width, height);
-        button.setStyle("-fx-font: 32 arial; -fx-base: #b6e7c9;");
+        button.setStyle("-fx-font: 26 arial; -fx-base: #b6a7c9;");
         button.setLayoutX(x);
         button.setLayoutY(y);
         return button;

@@ -5,13 +5,19 @@ import game.Preferences;
 import game.sprite.AlienStrategy;
 import game.sprite.Sprite;
 import javafx.animation.AnimationTimer;
+import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import sun.dc.pr.PRError;
 
 import javax.naming.directory.AttributeInUseException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,6 +27,8 @@ public class GameWindow extends Scene implements WindowController {
     private List<Sprite> units;
     private AnimationTimer timer;
 
+    private double stopwatch;
+
     public GameWindow(Parent root, double width, double height) {
         super(root, width, height);
         this.root = (BorderPane) root;
@@ -28,6 +36,16 @@ public class GameWindow extends Scene implements WindowController {
 
     @Override
     public void display(Stage primaryStage, List<Scene> scenes){
+
+        try {
+            this.getStylesheets().addAll(
+                    new URL("file:css/styles.css")
+                            .toExternalForm()
+            );
+        } catch (MalformedURLException exception) {
+            exception.printStackTrace();
+        }
+
         initSprites();
         initKeyActions(primaryStage, scenes);
         run(primaryStage, scenes);
@@ -42,7 +60,7 @@ public class GameWindow extends Scene implements WindowController {
                         Preferences.PLAYER_WIDTH,
                         Preferences.PLAYER_HEIGHT,
                         Preferences.SpriteType.PLAYER.toString(),
-                        Color.GREEN
+                        Preferences.IMAGE.impl_getUrl()
                 )
         );
         root.getChildren().add(units.get(0));
@@ -105,6 +123,7 @@ public class GameWindow extends Scene implements WindowController {
     }
 
     private void run(Stage primaryStage, List<Scene> scenes) {
+        stopwatch = System.currentTimeMillis();
         timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
@@ -122,12 +141,12 @@ public class GameWindow extends Scene implements WindowController {
         /*
             Moving all the aliens line
          */
-        units
-                .forEach(unit -> {
-                    if(unit.getType().equals(Preferences.SpriteType.ALIEN.toString())){
-                        unit.move();
-                    }
-                });
+//        units
+//                .forEach(unit -> {
+//                    if(unit.getType().equals(Preferences.SpriteType.ALIEN.toString())){
+//                        unit.move();
+//                    }
+//                });
         /*
             Make the alien shoot, generated above
          */
@@ -178,7 +197,7 @@ public class GameWindow extends Scene implements WindowController {
                         }
                         units
                                 .forEach(alien -> {
-                                    if(alien.getType().equals(Preferences.SpriteType.ALIEN.toString())){
+                                    if(alien.getType().equals(Preferences.SpriteType.ALIEN.toString()) || alien.getType().equals(Preferences.SpriteType.ALIEN_ROCKET.toString())){
                                         if(unit.intersects(alien)){
                                             alien.die();
                                             unit.die();
@@ -189,15 +208,39 @@ public class GameWindow extends Scene implements WindowController {
                                                     .filter(specie -> specie.getType().equals(Preferences.SpriteType.ALIEN.toString()))
                                                     .count();
                                             if(aliensAmount == 0){
-                                                timer.stop();
-                                                ((WinWindow) scenes.get(7)).display(primaryStage, scenes);
-                                                primaryStage.setScene(scenes.get(7));
+                                                Preferences.isRoundWon = true;
                                             }
                                         }
                                     }
                                 });
                     }
                 });
+
+        if(Preferences.isRoundWon){
+            if(Preferences.CURRENT_ROUND == Preferences.MAX_ROUND){
+                Preferences.isGameWon = true;
+                Preferences.isRoundWon = false;
+            } else {
+                Preferences.CURRENT_ROUND += 1;
+                scenes.set(
+                        0,
+                        new GameWindow(
+                                new BorderPane(),
+                                Preferences.WINDOW_WIDTH,
+                                Preferences.WINDOW_HEIGHT
+                        )
+                );
+                ((GameWindow) scenes.get(0)).display(primaryStage, scenes);
+                primaryStage.setScene(scenes.get(0));
+                Preferences.isRoundWon = false;
+            }
+        }
+
+        if(Preferences.isGameWon){
+            ((WinWindow) scenes.get(7)).display(primaryStage, scenes);
+            primaryStage.setScene(scenes.get(7));
+            Preferences.isGameWon = false;
+        }
 
         root.getChildren().removeIf(predicate -> {
             Sprite sprite = (Sprite) predicate;
@@ -218,8 +261,10 @@ public class GameWindow extends Scene implements WindowController {
 //    }
 
     private void clearGameWindow() {
-        root.getChildren().removeAll(units);
-        units = new ArrayList<>();
+        root.getChildren().removeIf(predicate -> {
+            Sprite sprite = (Sprite) predicate;
+            return !sprite.isAlive() || sprite.isAlive();
+        });
     }
 
     @Override

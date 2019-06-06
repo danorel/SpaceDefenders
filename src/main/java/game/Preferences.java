@@ -1,5 +1,7 @@
 package game;
 
+import javafx.scene.image.Image;
+
 public class Preferences {
     /*
         Main window parameters
@@ -32,13 +34,12 @@ public class Preferences {
     public static final double PLAYER_WIDTH    = 35;
     public static final double PLAYER_HEIGHT   = 35;
     public static final double PLAYER_VELOCITY = 15;
-    public static boolean isAlive              = true;
     /*
         Rocket options
      */
     public static final int ROCKET_WIDTH       = 5;
     public static final int ROCKET_HEIGHT      = 20;
-    public static final double ROCKET_VELOCITY = 10;
+    public static final double ROCKET_VELOCITY = 5;
     /*
         Main panel buttons and location
      */
@@ -51,7 +52,13 @@ public class Preferences {
         Player start position on the desk (the middle point)
      */
     public static final int PLAYER_START_X = (int) (WINDOW_WIDTH / 2 - PLAYER_WIDTH / 2);
-    public static final int PLAYER_START_Y = (int) (WINDOW_HEIGHT - 1.5 * PLAYER_HEIGHT);
+    public static final int PLAYER_START_Y = (int) (WINDOW_HEIGHT - 2.5 * PLAYER_HEIGHT);
+    /*
+        Hero's skin
+        Default skin:
+        Locates on: resources/models/plane_models/player-model.png
+     */
+    public static Image IMAGE = new Image("file:resources/models/plane_models/player_models/spaceship-1.png");
     /*
         The chance of meteor flying (5/1000)
      */
@@ -60,7 +67,7 @@ public class Preferences {
         Game options
      */
     public static final int MAX_ROUND = 4;
-    public static int CURRENT_ROUND   = 2;
+    public static int CURRENT_ROUND   = 0;
     public static boolean isRoundWon  = false;
     public static boolean isGameWon   = false;
 }

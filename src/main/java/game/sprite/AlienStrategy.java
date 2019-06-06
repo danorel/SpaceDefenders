@@ -41,7 +41,8 @@ public class AlienStrategy {
                             Preferences.ALIEN_WIDTH,
                             Preferences.ALIEN_HEIGHT,
                             Preferences.SpriteType.ALIEN.toString(),
-                            Color.DARKRED)
+                            "file:resources/models/plane_models/alien_models/ufo-1.png"
+                    )
             );
         }
     }
@@ -57,7 +58,8 @@ public class AlienStrategy {
                             Preferences.ALIEN_WIDTH,
                             Preferences.ALIEN_HEIGHT,
                             Preferences.SpriteType.ALIEN.toString(),
-                            Color.DARKRED)
+                            "file:resources/models/plane_models/alien_models/ufo-2.png"
+                    )
             );
         }
         for (int alien = Preferences.ALIEN_AMOUNT_PER_LEVEL[Preferences.CURRENT_ROUND] / 2, STEP = Preferences.WINDOW_WIDTH / 5; alien < Preferences.ALIEN_AMOUNT_PER_LEVEL[Preferences.CURRENT_ROUND] - 1; alien++, STEP += Preferences.WINDOW_WIDTH / 5) {
@@ -68,7 +70,8 @@ public class AlienStrategy {
                             Preferences.ALIEN_WIDTH,
                             Preferences.ALIEN_HEIGHT,
                             Preferences.SpriteType.ALIEN.toString(),
-                            Color.DARKRED)
+                            "file:resources/models/plane_models/alien_models/ufo-2.png"
+                    )
             );
         }
         units.add(
@@ -78,7 +81,8 @@ public class AlienStrategy {
                         Preferences.ALIEN_WIDTH,
                         Preferences.ALIEN_HEIGHT,
                         Preferences.SpriteType.ALIEN.toString(),
-                        Color.DARKRED)
+                        "file:resources/models/plane_models/alien_models/ufo-2.png"
+                )
         );
     }
     /*
@@ -93,7 +97,8 @@ public class AlienStrategy {
                             Preferences.ALIEN_WIDTH,
                             Preferences.ALIEN_HEIGHT,
                             Preferences.SpriteType.ALIEN.toString(),
-                            Color.DARKRED)
+                            "file:resources/models/plane_models/alien_models/ufo-3.png"
+                    )
             );
         }
         for (int alien = Preferences.ALIEN_AMOUNT_PER_LEVEL[Preferences.CURRENT_ROUND] / 2 - 1, STEP = Preferences.WINDOW_WIDTH / 5; alien < Preferences.ALIEN_AMOUNT_PER_LEVEL[Preferences.CURRENT_ROUND] - 2; alien++, STEP += Preferences.WINDOW_WIDTH / 5) {
@@ -104,7 +109,8 @@ public class AlienStrategy {
                             Preferences.ALIEN_WIDTH,
                             Preferences.ALIEN_HEIGHT,
                             Preferences.SpriteType.ALIEN.toString(),
-                            Color.DARKRED)
+                            "file:resources/models/plane_models/alien_models/ufo-3.png"
+                    )
             );
         }
         for (int alien = Preferences.ALIEN_AMOUNT_PER_LEVEL[Preferences.CURRENT_ROUND] - 2, STEP = Preferences.WINDOW_WIDTH / 4; alien < Preferences.ALIEN_AMOUNT_PER_LEVEL[Preferences.CURRENT_ROUND]; alien++, STEP += Preferences.WINDOW_WIDTH / 4) {
@@ -115,7 +121,8 @@ public class AlienStrategy {
                             Preferences.ALIEN_WIDTH,
                             Preferences.ALIEN_HEIGHT,
                             Preferences.SpriteType.ALIEN.toString(),
-                            Color.DARKRED)
+                            "file:resources/models/plane_models/alien_models/ufo-3.png"
+                    )
             );
         }
     }
@@ -131,7 +138,8 @@ public class AlienStrategy {
                             Preferences.ALIEN_WIDTH,
                             Preferences.ALIEN_HEIGHT,
                             Preferences.SpriteType.ALIEN.toString(),
-                            Color.DARKRED)
+                            "file:resources/models/plane_models/alien_models/ufo-4.png"
+                    )
             );
         }
     }
@@ -146,7 +154,7 @@ public class AlienStrategy {
                         Preferences.ALIEN_WIDTH,
                         Preferences.ALIEN_HEIGHT,
                         Preferences.SpriteType.ALIEN.toString(),
-                        Color.DARKRED
+                        "file:resources/models/plane_models/alien_models/boss.png"
                 )
         );
     }

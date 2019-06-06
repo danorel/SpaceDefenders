@@ -11,6 +11,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.util.List;
@@ -21,7 +22,7 @@ public class WinWindow extends Scene implements WindowController{
     private Label won;
 
     public WinWindow(Parent root, double width, double height) {
-        super(root, width, height);
+        super(root, width, height, Color.rgb(255, 255, 225));
         this.root = (Group) root;
     }
 
@@ -56,11 +57,12 @@ public class WinWindow extends Scene implements WindowController{
                 Preferences.MAIN_BUTTON_X,
                 Preferences.MAIN_BUTTON_Y + Preferences.MAIN_BUTTON_DIFFERENCE);
         toMainMenu.setOnAction(event -> {
+            ((MainWindow) scenes.get(2)).display(primaryStage, scenes);
             primaryStage.setScene(scenes.get(2));
         });
 
         Image image = new Image(
-                getClass().getResourceAsStream("resources/messages/game-won.png")
+                "file:resources/messages/game-won.png"
         );
         won = new Label(
                 "", new ImageView(image)

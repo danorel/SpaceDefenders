@@ -1,11 +1,11 @@
 package game.sprite;
 
 import game.Preferences;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javax.naming.directory.AttributeInUseException;
 
-public class Sprite extends Rectangle
+public class Sprite extends ImageView
 {
     private boolean isAlive  = true;
     private double positionX = 0;
@@ -14,8 +14,8 @@ public class Sprite extends Rectangle
     private double height    = 0;
     private StringBuilder type;
 
-    public Sprite(double positionX, double positionY, double width, double height, String type, Color color){
-        super(width, height, color);
+    public Sprite(double positionX, double positionY, double width, double height, String type, String url){
+        super(url);
         this.type       = new StringBuilder(type);
         this.positionX  = positionX;
         this.positionY  = positionY;
@@ -93,7 +93,7 @@ public class Sprite extends Rectangle
                     Preferences.ROCKET_WIDTH,
                     Preferences.ROCKET_HEIGHT,
                     Preferences.SpriteType.ALIEN_ROCKET.toString(),
-                    Color.DARKRED
+                    "file:resources/models/missles/rocket-2.png"
             );
         } else if(type.toString().equals(Preferences.SpriteType.PLAYER.toString())){
             return new Sprite(
@@ -102,7 +102,7 @@ public class Sprite extends Rectangle
                     Preferences.ROCKET_WIDTH,
                     Preferences.ROCKET_HEIGHT,
                     Preferences.SpriteType.PLAYER_ROCKET.toString(),
-                    Color.BLACK
+                    "file:resources/models/missles/rocket-2.png"
             );
         } else {
             throw new AttributeInUseException(
