@@ -123,6 +123,10 @@ public class Sprite extends Rectangle
         return isAlive;
     }
 
+    public String getType(){
+        return type.toString();
+    }
+
     @Override
     public String toString() {
         return type.toString();
