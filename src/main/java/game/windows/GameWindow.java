@@ -77,10 +77,8 @@ public class GameWindow extends Scene implements WindowController {
                             .forEach(unit -> {
                                 if (unit.getType().equals(Preferences.SpriteType.PLAYER.toString())
                                 ){
-                                    try {
-                                        unit.moveLeft();
-                                    } catch (AttributeInUseException exception) {
-                                        exception.printStackTrace();
+                                    if(Preferences.PLAYER_VELOCITY > 0) {
+                                        Preferences.PLAYER_VELOCITY = -Preferences.PLAYER_VELOCITY;
                                     }
                                 }
                             });
@@ -90,10 +88,8 @@ public class GameWindow extends Scene implements WindowController {
                             .forEach(unit -> {
                                 if (unit.getType().equals(Preferences.SpriteType.PLAYER.toString())
                                 ){
-                                    try {
-                                        unit.moveRight();
-                                    } catch (AttributeInUseException exception) {
-                                        exception.printStackTrace();
+                                    if(Preferences.PLAYER_VELOCITY < 0){
+                                        Preferences.PLAYER_VELOCITY = - Preferences.PLAYER_VELOCITY;
                                     }
                                 }
                             });
@@ -141,12 +137,19 @@ public class GameWindow extends Scene implements WindowController {
         /*
             Moving all the aliens line
          */
-//        units
-//                .forEach(unit -> {
-//                    if(unit.getType().equals(Preferences.SpriteType.ALIEN.toString())){
-//                        unit.move();
-//                    }
-//                });
+        units
+                .forEach(unit -> {
+                    if(unit.getType().equals(Preferences.SpriteType.ALIEN.toString())){
+                        unit.move();
+                    }
+                });
+
+        units
+                .forEach(unit -> {
+                    if(unit.getType().equals(Preferences.SpriteType.PLAYER.toString())){
+                        unit.move();
+                    }
+                });
         /*
             Make the alien shoot, generated above
          */
@@ -219,7 +222,7 @@ public class GameWindow extends Scene implements WindowController {
         if(Preferences.isRoundWon){
             if(Preferences.CURRENT_ROUND == Preferences.MAX_ROUND){
                 Preferences.isGameWon = true;
-                Preferences.isRoundWon = false;
+
             } else {
                 Preferences.CURRENT_ROUND += 1;
                 scenes.set(
@@ -232,8 +235,8 @@ public class GameWindow extends Scene implements WindowController {
                 );
                 ((GameWindow) scenes.get(0)).display(primaryStage, scenes);
                 primaryStage.setScene(scenes.get(0));
-                Preferences.isRoundWon = false;
             }
+            Preferences.isRoundWon = false;
         }
 
         if(Preferences.isGameWon){

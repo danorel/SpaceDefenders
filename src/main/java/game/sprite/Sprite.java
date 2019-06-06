@@ -26,36 +26,26 @@ public class Sprite extends ImageView
     }
 
     public void move(){
-        setTranslateX(positionX + Preferences.ALIEN_VELOCITY);
-        if(getTranslateX() > Preferences.WINDOW_WIDTH - Preferences.ALIEN_WIDTH || getTranslateX() < 0){
-            setTranslateY(getTranslateY() + Preferences.ALIEN_HEIGHT + 10);
-            Preferences.ALIEN_VELOCITY = -Preferences.ALIEN_VELOCITY;
-        }
-    }
-
-    public void moveLeft() throws AttributeInUseException {
-        if(type.toString().equals(Preferences.SpriteType.PLAYER.toString())) {
-            setTranslateX(getTranslateX() - Preferences.PLAYER_VELOCITY);
-            if (getTranslateX() < 0) {
-                setTranslateX(Preferences.WINDOW_WIDTH - Preferences.PLAYER_WIDTH);
+        if(type.toString().equals(Preferences.SpriteType.ALIEN.toString())) {
+            setTranslateX(getTranslateX() + Preferences.ALIEN_VELOCITY);
+            if (getTranslateX() > Preferences.WINDOW_WIDTH - Preferences.ALIEN_WIDTH) {
+                setTranslateY(getTranslateY() + Preferences.ALIEN_HEIGHT + 10);
+                Preferences.ALIEN_VELOCITY = -Preferences.ALIEN_VELOCITY;
             }
-        } else {
-            throw new AttributeInUseException(
-                    "Error! This unit cannot use move left function. Try another one!"
-            );
+            if(getTranslateX() < -Preferences.ALIEN_WIDTH){
+                setTranslateY(getTranslateY() + Preferences.ALIEN_HEIGHT + 10);
+                Preferences.ALIEN_VELOCITY = - Preferences.ALIEN_VELOCITY;
+            }
         }
-    }
 
-    public void moveRight() throws AttributeInUseException {
         if(type.toString().equals(Preferences.SpriteType.PLAYER.toString())){
             setTranslateX(getTranslateX() + Preferences.PLAYER_VELOCITY);
             if(getTranslateX() > Preferences.WINDOW_WIDTH - Preferences.PLAYER_WIDTH){
-                setTranslateX(0);
+                setTranslateX(-Preferences.PLAYER_WIDTH);
             }
-        } else {
-            throw new AttributeInUseException(
-                    "Error! This unit cannot use move right function. Try another one!"
-            );
+            if(getTranslateX() < -Preferences.PLAYER_WIDTH){
+                setTranslateX(Preferences.WINDOW_WIDTH - Preferences.PLAYER_WIDTH);
+            }
         }
     }
 
@@ -93,7 +83,7 @@ public class Sprite extends ImageView
                     Preferences.ROCKET_WIDTH,
                     Preferences.ROCKET_HEIGHT,
                     Preferences.SpriteType.ALIEN_ROCKET.toString(),
-                    "file:resources/models/missles/rocket-2.png"
+                    "file:resources/models/missles/rocket-1.png"
             );
         } else if(type.toString().equals(Preferences.SpriteType.PLAYER.toString())){
             return new Sprite(

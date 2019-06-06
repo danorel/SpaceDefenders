@@ -96,8 +96,7 @@ public class AlienStrategy {
                             10 + Preferences.ALIEN_HEIGHT,
                             Preferences.ALIEN_WIDTH,
                             Preferences.ALIEN_HEIGHT,
-                            Preferences.SpriteType.ALIEN.toString(),
-                            "file:resources/models/plane_models/alien_models/ufo-3.png"
+                            Preferences.SpriteType.ALIEN.toString(), "file:resources/models/plane_models/alien_models/ufo-3.png"
                     )
             );
         }

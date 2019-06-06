@@ -20,10 +20,9 @@ public class Preferences {
      */
     public static final double ALIEN_WIDTH     = 25;
     public static final double ALIEN_HEIGHT    = 25;
-    public static double ALIEN_VELOCITY        = 10;
+    public static double ALIEN_VELOCITY        = 2;
     public static final int[] ALIEN_AMOUNT_PER_LEVEL  = {5, 10, 12, 3, 1};
     public static final int ALIEN_START_X = (int) (WINDOW_WIDTH / 2 - ALIEN_WIDTH / 2);
-    public static final int ALIEN_START_Y = (int) (WINDOW_HEIGHT - 1.5 * ALIEN_HEIGHT);
     /*
         The chance of alien shooting (3/100)
      */
@@ -33,13 +32,24 @@ public class Preferences {
      */
     public static final double PLAYER_WIDTH    = 35;
     public static final double PLAYER_HEIGHT   = 35;
-    public static final double PLAYER_VELOCITY = 15;
+    public static double PLAYER_VELOCITY = 1;
     /*
         Rocket options
      */
     public static final int ROCKET_WIDTH       = 5;
     public static final int ROCKET_HEIGHT      = 20;
     public static final double ROCKET_VELOCITY = 5;
+    public static final int ROCKET_LAUNCH_CHANCE    = 5;
+    public static final int ROCKET_LAUNCH_CHANCE_RANGE = 100;
+    /*
+        Meteor parameters
+     */
+    public static final double METEOR_VELOCITY = 3;
+    /*
+       The chance of meteor flying (5/1000)
+    */
+    public static final int METEOR_APPEAR_CHANCE    = 5;
+    public static final int METEOR_APPEAR_RANGE     = 1000;
     /*
         Main panel buttons and location
      */
@@ -59,10 +69,6 @@ public class Preferences {
         Locates on: resources/models/plane_models/player-model.png
      */
     public static Image IMAGE = new Image("file:resources/models/plane_models/player_models/spaceship-1.png");
-    /*
-        The chance of meteor flying (5/1000)
-     */
-    public static final int METEOR_APPEAR_CHANCE = 5;
     /*
         Game options
      */
