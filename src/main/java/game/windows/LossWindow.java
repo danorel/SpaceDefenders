@@ -28,6 +28,11 @@ public class LossWindow extends Scene implements WindowController {
 
     @Override
     public void display(Stage primaryStage, List<Scene> scenes) {
+        Preferences.IS_ROUND_WON = false;
+        Preferences.IS_GAME_WON = false;
+        Preferences.CURRENT_KILLS  = 0;
+        Preferences.CURRENT_ROUND  = 0;
+
         replay = ButtonConstructor.construct(
                 "Replay",
                 Preferences.MAIN_BUTTON_WIDTH,
@@ -36,17 +41,16 @@ public class LossWindow extends Scene implements WindowController {
                 Preferences.MAIN_BUTTON_Y
         );
         replay.setOnAction(event -> {
-            GameWindow GW = new GameWindow(
-                    new BorderPane(),
-                    Preferences.WINDOW_WIDTH,
-                    Preferences.WINDOW_HEIGHT
+            scenes.set(
+                    0,
+                    new GameWindow(
+                            new BorderPane(),
+                            Preferences.WINDOW_WIDTH,
+                            Preferences.WINDOW_HEIGHT
+                    )
             );
-            scenes.set(0, GW);
-            GW.display(
-                    primaryStage,
-                    scenes
-            );
-            primaryStage.setScene(GW);
+            ((GameWindow) scenes.get(0)).display(primaryStage, scenes);
+            primaryStage.setScene(scenes.get(0));
         });
 
         toMainMenu = ButtonConstructor.construct(
@@ -101,10 +105,16 @@ public class LossWindow extends Scene implements WindowController {
                     primaryStage.setScene(scenes.get(0));
                     break;
                 case ESCAPE:
+                    scenes.set(
+                            2,
+                            new MainWindow(
+                                    new Group(),
+                                    Preferences.WINDOW_WIDTH,
+                                    Preferences.WINDOW_HEIGHT
+                            )
+                    );
                     ((MainWindow) scenes.get(2)).display(primaryStage, scenes);
                     primaryStage.setScene(scenes.get(2));
-                case PRINTSCREEN:
-                    break;
             }
         });
     }

@@ -8,14 +8,18 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.util.List;
 
 public class OptionsWindow extends Scene implements WindowController{
     private Group root;
-    private Button back;
+    private Button back, skin;
+    private FileChooser skinChooser;
 
     public OptionsWindow(Parent root, double width, double height) {
         super(root, width, height, Color.rgb(150,50,100));
@@ -41,6 +45,23 @@ public class OptionsWindow extends Scene implements WindowController{
             );
             ((MainWindow) scenes.get(2)).display(primaryStage, scenes);
             primaryStage.setScene(scenes.get(2));
+        });
+
+        skin =  ButtonConstructor.construct(
+                "Choose skin",
+                Preferences.MAIN_BUTTON_WIDTH,
+                Preferences.MAIN_BUTTON_HEIGHT,
+                Preferences.MAIN_BUTTON_X,
+                Preferences.MAIN_BUTTON_Y + Preferences.MAIN_BUTTON_DIFFERENCE
+        );
+        skin.setOnAction(event -> {
+            skinChooser = new FileChooser();
+            skinChooser.getExtensionFilters().addAll(
+                    new FileChooser.ExtensionFilter("PNG Files", "*.png")
+                    ,new FileChooser.ExtensionFilter("JPEG Files", "*.jpg")
+            );
+            File file = skinChooser.showOpenDialog(primaryStage);
+            Preferences.IMAGE = new Image(file.getAbsolutePath());
         });
 
         root.getChildren().addAll(

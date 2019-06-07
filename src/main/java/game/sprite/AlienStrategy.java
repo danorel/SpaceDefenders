@@ -50,6 +50,8 @@ public class AlienStrategy {
         Initializing the second aliens strategy
     */
     private void secondRound(List<Sprite> units) {
+        Preferences.METEOR_VELOCITY += 1;
+        Preferences.ROCKET_LAUNCH_CHANCE += 1;
         for (int alien = 0, STEP = Preferences.WINDOW_WIDTH / 6; alien < Preferences.ALIEN_AMOUNT_PER_LEVEL[Preferences.CURRENT_ROUND] / 2; alien++, STEP += Preferences.WINDOW_WIDTH / 6) {
             units.add(
                     new Sprite(
@@ -57,8 +59,7 @@ public class AlienStrategy {
                             10 + Preferences.ALIEN_HEIGHT,
                             Preferences.ALIEN_WIDTH,
                             Preferences.ALIEN_HEIGHT,
-                            Preferences.SpriteType.ALIEN.toString(),
-                            "file:resources/models/plane_models/alien_models/ufo-2.png"
+                            Preferences.SpriteType.ALIEN.toString(), "file:resources/models/plane_models/alien_models/ufo-2.png"
                     )
             );
         }
@@ -89,6 +90,8 @@ public class AlienStrategy {
         Initializing the third aliens strategy
     */
     private void thirdRound(List<Sprite> units) {
+        Preferences.ROCKET_LAUNCH_CHANCE += 1;
+        Preferences.METEOR_APPEAR_CHANCE += 5;
         for (int alien = 0, STEP = Preferences.WINDOW_WIDTH / 6; alien < Preferences.ALIEN_AMOUNT_PER_LEVEL[Preferences.CURRENT_ROUND] / 2 - 1; alien++, STEP += Preferences.WINDOW_WIDTH / 6) {
             units.add(
                     new Sprite(
@@ -100,7 +103,7 @@ public class AlienStrategy {
                     )
             );
         }
-        for (int alien = Preferences.ALIEN_AMOUNT_PER_LEVEL[Preferences.CURRENT_ROUND] / 2 - 1, STEP = Preferences.WINDOW_WIDTH / 5; alien < Preferences.ALIEN_AMOUNT_PER_LEVEL[Preferences.CURRENT_ROUND] - 2; alien++, STEP += Preferences.WINDOW_WIDTH / 5) {
+        for (int alien = Preferences.ALIEN_AMOUNT_PER_LEVEL[Preferences.CURRENT_ROUND] / 2 - 1, STEP = Preferences.WINDOW_WIDTH / 5; alien < Preferences.ALIEN_AMOUNT_PER_LEVEL[Preferences.CURRENT_ROUND] - 3; alien++, STEP += Preferences.WINDOW_WIDTH / 5) {
             units.add(
                     new Sprite(
                             STEP - Preferences.ALIEN_WIDTH / 2,
@@ -112,7 +115,7 @@ public class AlienStrategy {
                     )
             );
         }
-        for (int alien = Preferences.ALIEN_AMOUNT_PER_LEVEL[Preferences.CURRENT_ROUND] - 2, STEP = Preferences.WINDOW_WIDTH / 4; alien < Preferences.ALIEN_AMOUNT_PER_LEVEL[Preferences.CURRENT_ROUND]; alien++, STEP += Preferences.WINDOW_WIDTH / 4) {
+        for (int alien = Preferences.ALIEN_AMOUNT_PER_LEVEL[Preferences.CURRENT_ROUND] - 3, STEP = Preferences.WINDOW_WIDTH / 4; alien < Preferences.ALIEN_AMOUNT_PER_LEVEL[Preferences.CURRENT_ROUND]; alien++, STEP += Preferences.WINDOW_WIDTH / 4) {
             units.add(
                     new Sprite(
                             STEP - Preferences.ALIEN_WIDTH / 2,
@@ -129,6 +132,8 @@ public class AlienStrategy {
         Initializing the fourth aliens strategy
      */
     private void fourthRound(List<Sprite> units) {
+        Preferences.ROCKET_LAUNCH_CHANCE += 1;
+        Preferences.ROCKET_VELOCITY += 1;
         for (int alien = 0, STEP = Preferences.WINDOW_WIDTH / 4; alien < Preferences.ALIEN_AMOUNT_PER_LEVEL[Preferences.CURRENT_ROUND]; alien++, STEP += Preferences.WINDOW_WIDTH / 4) {
             units.add(
                     new Sprite(
@@ -146,6 +151,7 @@ public class AlienStrategy {
         Initializing the fifth aliens strategy
      */
     private void fifthRound(List<Sprite> units) {
+        Preferences.METEOR_APPEAR_CHANCE += 5;
         units.add(
                 new Sprite(
                         Preferences.ALIEN_START_X - Preferences.ALIEN_WIDTH / 2,

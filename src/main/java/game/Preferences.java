@@ -28,30 +28,30 @@ public class Preferences {
      */
     public static final double PLAYER_WIDTH    = 35;
     public static final double PLAYER_HEIGHT   = 35;
-    public static double PLAYER_VELOCITY = 1;
+    public static double PLAYER_VELOCITY       = 1;
     /*
         Rocket options
      */
     public static final int ROCKET_WIDTH               = 5;
     public static final int ROCKET_HEIGHT              = 20;
-    public static final double ROCKET_VELOCITY         = 5;
-    public static final int ROCKET_LAUNCH_CHANCE       = 5;
+    public static double ROCKET_VELOCITY               = 5;
+    public static int ROCKET_LAUNCH_CHANCE             = 5;
     public static final int ROCKET_LAUNCH_CHANCE_RANGE = 100;
     /*
         Meteor parameters
      */
     public static final double METEOR_WIDTH            = 50;
     public static final int METEOR_HEIGHT              = 50;
-    public static final double METEOR_VELOCITY         = 3;
+    public static double METEOR_VELOCITY               = 3;
     /*
        The chance of meteor flying (5/1000)
     */
-    public static final int METEOR_APPEAR_CHANCE       = 1;
-    public static final int METEOR_APPEAR_RANGE        = 100;
+    public static int METEOR_APPEAR_CHANCE             = 5;
+    public static final int METEOR_APPEAR_RANGE        = 1000;
     /*
         Main panel buttons and location
      */
-    public static final int MAIN_BUTTON_WIDTH          = 220;
+    public static final int MAIN_BUTTON_WIDTH          = 250;
     public static final int MAIN_BUTTON_HEIGHT         = 30;
     public static final int MAIN_BUTTON_DIFFERENCE = WINDOW_HEIGHT / 6;
     public static final int MAIN_BUTTON_X = (WINDOW_WIDTH - MAIN_BUTTON_WIDTH) / 2;
@@ -70,8 +70,10 @@ public class Preferences {
     /*
         Game options
      */
-    public static final int MAX_ROUND = 4;
-    public static int CURRENT_ROUND   = 0;
-    public static boolean isRoundWon  = false;
-    public static boolean isGameWon   = false;
+    public static boolean IS_VERSUS_HUMAN = false;
+    public static final int MAX_ROUND     = 5;
+    public static int CURRENT_ROUND       = 0;
+    public static boolean IS_ROUND_WON    = false;
+    public static boolean IS_GAME_WON     = false;
+    public static int CURRENT_KILLS       = 0;
 }
