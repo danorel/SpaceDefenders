@@ -5,6 +5,7 @@ import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
@@ -20,11 +21,7 @@ public class App extends Application {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle(Preferences.TITLE);
         init();
-        ((MainWindow) scenes.get(2))
-                .display(
-                        primaryStage,
-                        scenes
-                );
+        ((MainWindow) scenes.get(2)).display(primaryStage, scenes);
         primaryStage.setScene(scenes.get(2));
         primaryStage.show();
     }
@@ -33,69 +30,70 @@ public class App extends Application {
     public void init() {
         scenes = new ArrayList<>();
 
-        scenes.add(
-                new GameWindow(
-                        new BorderPane(),
-                        Preferences.WINDOW_WIDTH,
-                        Preferences.WINDOW_HEIGHT
-                )
+        GameWindow GW = new GameWindow(
+                new BorderPane(),
+                Preferences.WINDOW_WIDTH,
+                Preferences.WINDOW_HEIGHT
         );
+        scenes.add(GW);
 
-        scenes.add(
-                new LossWindow(
-                        new Group(),
-                        Preferences.WINDOW_WIDTH,
-                        Preferences.WINDOW_HEIGHT
-                )
+        LossWindow LW = new LossWindow(
+                new StackPane(),
+                Preferences.WINDOW_WIDTH,
+                Preferences.WINDOW_HEIGHT
         );
+        scenes.add(LW);
 
-        scenes.add(
-                new MainWindow(
-                        new Group(),
-                        Preferences.WINDOW_WIDTH,
-                        Preferences.WINDOW_HEIGHT
-                )
+        MainWindow MaW = new MainWindow(
+                new Group(),
+                Preferences.WINDOW_WIDTH,
+                Preferences.WINDOW_HEIGHT
         );
+        scenes.add(MaW);
 
-        scenes.add(
-                new ModeWindow(
-                        new Group(),
-                        Preferences.WINDOW_WIDTH,
-                        Preferences.WINDOW_HEIGHT
-                )
+        ModeWindow MW = new ModeWindow(
+                new Group(),
+                Preferences.WINDOW_WIDTH,
+                Preferences.WINDOW_HEIGHT
         );
+        scenes.add(MW);
 
-        scenes.add(
-                new OptionsWindow(
-                        new Group(),
-                        Preferences.WINDOW_WIDTH,
-                        Preferences.WINDOW_HEIGHT
-                )
+        OptionsWindow OW = new OptionsWindow(
+                new Group(),
+                Preferences.WINDOW_WIDTH,
+                Preferences.WINDOW_HEIGHT
         );
+        scenes.add(OW);
 
-        scenes.add(
-                new PauseWindow(
-                        new Group(),
-                        Preferences.WINDOW_WIDTH,
-                        Preferences.WINDOW_HEIGHT
-                )
+        PauseWindow PW = new PauseWindow(
+                new Group(),
+                Preferences.WINDOW_WIDTH,
+                Preferences.WINDOW_HEIGHT
         );
+        scenes.add(PW);
 
-        scenes.add(
-                new StatsWindow(
-                        new Group(),
-                        Preferences.WINDOW_WIDTH,
-                        Preferences.WINDOW_HEIGHT
-                )
+        StatsWindow SW = new StatsWindow(
+                new Group(),
+                Preferences.WINDOW_WIDTH,
+                Preferences.WINDOW_HEIGHT
         );
+        scenes.add(SW);
 
-        scenes.add(
-                new WinWindow(
-                        new Group(),
-                        Preferences.WINDOW_WIDTH,
-                        Preferences.WINDOW_HEIGHT
-                )
+        WinWindow WW = new WinWindow(
+                new Group(),
+                Preferences.WINDOW_WIDTH,
+                Preferences.WINDOW_HEIGHT
         );
+        scenes.add(WW);
+
+        GW.initKeyActions(primaryStage, scenes);
+        LW.initKeyActions(primaryStage, scenes);
+        MaW.initKeyActions(primaryStage, scenes);
+        MW.initKeyActions(primaryStage, scenes);
+        OW.initKeyActions(primaryStage, scenes);
+        PW.initKeyActions(primaryStage, scenes);
+        SW.initKeyActions(primaryStage, scenes);
+        WW.initKeyActions(primaryStage, scenes);
     }
 
     public static void main(String[] args) {

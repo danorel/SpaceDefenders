@@ -86,14 +86,14 @@ public class WinWindow extends Scene implements WindowController{
         prePress = new Label("Press TAB to start a new game");
         prePress.setFont(new Font("Arial", 24));
         prePress.setBackground(new Background(backgroundFill));
-        prePress.setLayoutX(0);
-        prePress.setLayoutY(Preferences.WINDOW_HEIGHT - 50);
+        prePress.setTranslateX(0);
+        prePress.setTranslateY(Preferences.WINDOW_HEIGHT - 50);
 
         afterPress = new Label("Press TAB to start a new game");
         afterPress.setFont(new Font("Arial", 24));
         afterPress.setBackground(new Background(backgroundFill));
-        afterPress.setLayoutX(-Preferences.WINDOW_WIDTH);
-        afterPress.setLayoutY(Preferences.WINDOW_HEIGHT - 50);
+        afterPress.setTranslateX(-Preferences.WINDOW_WIDTH);
+        afterPress.setTranslateY(Preferences.WINDOW_HEIGHT - 50);
 
         run();
 
@@ -118,6 +118,18 @@ public class WinWindow extends Scene implements WindowController{
             switch (event.getCode()){
                 case TAB:
                     scenes.set(
+                            0,
+                            new MainWindow(
+                                    new Group(),
+                                    Preferences.WINDOW_WIDTH,
+                                    Preferences.WINDOW_HEIGHT
+                            )
+                    );
+                    ((MainWindow) scenes.get(0)).display(primaryStage, scenes);
+                    primaryStage.setScene(scenes.get(0));
+                    break;
+                case ESCAPE:
+                    scenes.set(
                             2,
                             new MainWindow(
                                     new Group(),
@@ -125,16 +137,16 @@ public class WinWindow extends Scene implements WindowController{
                                     Preferences.WINDOW_HEIGHT
                             )
                     );
-                    ((MainWindow) scenes.get(2)).display(primaryStage, scenes);
+                    ((WinWindow) scenes.get(2)).display(primaryStage, scenes);
                     primaryStage.setScene(scenes.get(2));
                     break;
-                case ESCAPE:
-                    primaryStage.setScene(scenes.get(2));
+                default:
+                    break;
             }
         });
     }
 
-    public void run(){
+    private void run(){
         animationTimer = new AnimationTimer() {
             @Override
             public void handle(long now) {
@@ -144,15 +156,14 @@ public class WinWindow extends Scene implements WindowController{
     }
 
     private void update() {
-        if(prePress.getLayoutX() >= Preferences.WINDOW_WIDTH + 200){
-            prePress.setLayoutX(-Preferences.WINDOW_WIDTH);
+        if(prePress.getTranslateX() >= Preferences.WINDOW_WIDTH + 200){
+            prePress.setTranslateX(-Preferences.WINDOW_WIDTH);
         }
-        if(afterPress.getLayoutX() >= Preferences.WINDOW_WIDTH + 200){
-            afterPress.setLayoutX(-Preferences.WINDOW_WIDTH);
+        if(afterPress.getTranslateX() >= Preferences.WINDOW_WIDTH + 200){
+            afterPress.setTranslateX(-Preferences.WINDOW_WIDTH);
         }
-        prePress.setLayoutX(prePress.getLayoutX() + 1);
-        afterPress.setLayoutX(afterPress.getLayoutX() + 1);
-
+        prePress.setTranslateX(prePress.getTranslateX() + 1);
+        afterPress.setTranslateX(afterPress.getTranslateX() + 1);
     }
 
     @Override

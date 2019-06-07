@@ -20,6 +20,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
+@SuppressWarnings("deprecation")
 public class MainWindow extends Scene implements WindowController{
     private AnimationTimer timer;
     private Group root;
@@ -77,7 +78,16 @@ public class MainWindow extends Scene implements WindowController{
                 Preferences.MAIN_BUTTON_Y
         );
         gotoMode.setOnAction(event -> {
+            scenes.set(
+                    3,
+                    new ModeWindow(
+                            new Group(),
+                            Preferences.WINDOW_WIDTH,
+                            Preferences.WINDOW_HEIGHT
+                    )
+            );
             ((ModeWindow) scenes.get(3)).display(primaryStage, scenes);
+            ((ModeWindow) scenes.get(3)).initKeyActions(primaryStage, scenes);
             primaryStage.setScene(scenes.get(3));
         });
 
@@ -88,7 +98,16 @@ public class MainWindow extends Scene implements WindowController{
                 Preferences.MAIN_BUTTON_X,
                 Preferences.MAIN_BUTTON_Y + Preferences.MAIN_BUTTON_DIFFERENCE);
         options.setOnAction(event -> {
+            scenes.set(
+                    4,
+                    new OptionsWindow(
+                            new Group(),
+                            Preferences.WINDOW_WIDTH,
+                            Preferences.WINDOW_HEIGHT
+                    )
+            );
             ((OptionsWindow) scenes.get(4)).display(primaryStage, scenes);
+            ((OptionsWindow) scenes.get(4)).initKeyActions(primaryStage, scenes);
             primaryStage.setScene(scenes.get(4));
         });
 
@@ -136,6 +155,16 @@ public class MainWindow extends Scene implements WindowController{
         setOnKeyPressed(event -> {
             switch (event.getCode()){
                 case ENTER:
+                    scenes.set(
+                            3,
+                            new ModeWindow(
+                                    new Group(),
+                                    Preferences.WINDOW_WIDTH,
+                                    Preferences.WINDOW_HEIGHT
+                            )
+                    );
+                    ((ModeWindow) scenes.get(3)).display(primaryStage, scenes);
+                    ((ModeWindow) scenes.get(3)).initKeyActions(primaryStage, scenes);
                     primaryStage.setScene(scenes.get(3));
                     break;
                 case ESCAPE:
@@ -144,6 +173,9 @@ public class MainWindow extends Scene implements WindowController{
                     alert.setHeaderText("Do you really want to exit?");
                     alert.setContentText("Type: Yes or No");
                     alert.showAndWait();
+                    break;
+                default:
+                    break;
             }
         });
     }

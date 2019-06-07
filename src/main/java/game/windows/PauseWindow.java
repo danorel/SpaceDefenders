@@ -28,7 +28,9 @@ public class PauseWindow extends Scene implements WindowController{
                 Preferences.MAIN_BUTTON_HEIGHT,
                 Preferences.MAIN_BUTTON_X,
                 Preferences.MAIN_BUTTON_Y);
-        resume.setOnAction(event -> primaryStage.setScene(scenes.get(0)));
+        resume.setOnAction(event -> {
+            primaryStage.setScene(scenes.get(0));
+        });
 
         options = ButtonConstructor.construct(
                 "Options",
@@ -36,7 +38,18 @@ public class PauseWindow extends Scene implements WindowController{
                 Preferences.MAIN_BUTTON_HEIGHT,
                 Preferences.MAIN_BUTTON_X,
                 Preferences.MAIN_BUTTON_Y + Preferences.MAIN_BUTTON_DIFFERENCE);
-        options.setOnAction(event -> primaryStage.setScene(scenes.get(4)));
+        options.setOnAction(event -> {
+            scenes.set(
+                    4,
+                    new OptionsWindow(
+                            new Group(),
+                            Preferences.WINDOW_WIDTH,
+                            Preferences.WINDOW_HEIGHT
+                    )
+            );
+            ((OptionsWindow) scenes.get(4)).display(primaryStage, scenes);
+            primaryStage.setScene(scenes.get(4));
+        });
 
         toMainMenu = ButtonConstructor.construct(
                 "Main Menu",
@@ -44,7 +57,18 @@ public class PauseWindow extends Scene implements WindowController{
                 Preferences.MAIN_BUTTON_HEIGHT,
                 Preferences.MAIN_BUTTON_X,
                 Preferences.MAIN_BUTTON_Y + 2 * Preferences.MAIN_BUTTON_DIFFERENCE);
-        toMainMenu.setOnAction(event -> primaryStage.setScene(scenes.get(2)));
+        toMainMenu.setOnAction(event -> {
+            scenes.set(
+                    2,
+                    new MainWindow(
+                            new Group(),
+                            Preferences.WINDOW_WIDTH,
+                            Preferences.WINDOW_HEIGHT
+                    )
+            );
+            ((PauseWindow) scenes.get(2)).display(primaryStage, scenes);
+            primaryStage.setScene(scenes.get(2));
+        });
         root.getChildren().addAll(
                 resume,
                 options,
@@ -58,6 +82,8 @@ public class PauseWindow extends Scene implements WindowController{
             switch (event.getCode()){
                 case ESCAPE:
                     primaryStage.setScene(scenes.get(0));
+                    break;
+                default:
                     break;
             }
         });

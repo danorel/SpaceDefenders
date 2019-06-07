@@ -11,11 +11,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 
 import javafx.scene.control.Label;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.*;
 
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
@@ -33,7 +30,8 @@ public class GameWindow extends Scene implements WindowController {
     private List<Sprite> units;
     private AnimationTimer animationTimer;
 
-    private Label kills, round;
+    private Label kills, round, level;
+    private int aliensAmount = 0;
 
     public GameWindow(Parent root, double width, double height) {
         super(root, width, height);
@@ -54,11 +52,9 @@ public class GameWindow extends Scene implements WindowController {
             exception.printStackTrace();
         }
 
-        Font font = Font.loadFont(("file:font/15211.ttf"), 30);
-
         kills = new Label();
         kills.setText("KILLS: " + Preferences.CURRENT_KILLS);
-        kills.setFont(font);
+        kills.setFont(Preferences.FONT);
         kills.setBackground(
                 new Background(
                         new BackgroundFill(
@@ -71,7 +67,7 @@ public class GameWindow extends Scene implements WindowController {
 
         round = new Label();
         round.setText("ROUND: " + String.valueOf(Preferences.CURRENT_ROUND + 1));
-        round.setFont(font);
+        round.setFont(Preferences.FONT);
         round.setBackground(
                 new Background(
                         new BackgroundFill(
@@ -82,16 +78,26 @@ public class GameWindow extends Scene implements WindowController {
                 )
         );
 
+        level = new Label();
+        level.setText("LEVEL: 1");
+        level.setFont(Preferences.FONT);
+        level.setBackground(
+                new Background(
+                        new BackgroundFill(
+                                Color.GREEN,
+                                CornerRadii.EMPTY,
+                                Insets.EMPTY
+                        )
+                )
+        );
+
         root.setTop(round);
-        root.setBottom(kills);
+        root.setBottom(level);
+        root.setCenter(kills);
 
         initSprites();
         initKeyActions(primaryStage, scenes);
-        if(Preferences.IS_VERSUS_HUMAN){
-            runVsHuman(primaryStage, scenes);
-        } else {
-            runVsComputer(primaryStage, scenes);
-        }
+        run(primaryStage, scenes);
     }
 
     private void initSprites() {
@@ -103,7 +109,7 @@ public class GameWindow extends Scene implements WindowController {
                         Preferences.PLAYER_WIDTH,
                         Preferences.PLAYER_HEIGHT,
                         Preferences.SpriteType.PLAYER.toString(),
-                        Preferences.IMAGE.impl_getUrl()
+                        Preferences.PLAYER_IMAGE.impl_getUrl()
                 )
         );
         root.getChildren().add(
@@ -122,8 +128,8 @@ public class GameWindow extends Scene implements WindowController {
                             .forEach(unit -> {
                                 if (unit.getType().equals(Preferences.SpriteType.PLAYER.toString())
                                 ) {
-                                    if (Preferences.PLAYER_VELOCITY > 0) {
-                                        Preferences.PLAYER_VELOCITY = -Preferences.PLAYER_VELOCITY;
+                                    if (Preferences.PLAYER_HORIZONTAL_VELOCITY > 0) {
+                                        Preferences.PLAYER_HORIZONTAL_VELOCITY = -Preferences.PLAYER_HORIZONTAL_VELOCITY;
                                     }
                                 }
                             });
@@ -133,8 +139,30 @@ public class GameWindow extends Scene implements WindowController {
                             .forEach(unit -> {
                                 if (unit.getType().equals(Preferences.SpriteType.PLAYER.toString())
                                 ) {
-                                    if (Preferences.PLAYER_VELOCITY < 0) {
-                                        Preferences.PLAYER_VELOCITY = -Preferences.PLAYER_VELOCITY;
+                                    Preferences.PLAYER_VERTICAL_VELOCITY = 0.5;
+                                    if (Preferences.PLAYER_HORIZONTAL_VELOCITY < 0) {
+                                        Preferences.PLAYER_HORIZONTAL_VELOCITY = -Preferences.PLAYER_HORIZONTAL_VELOCITY;
+                                    }
+                                    Preferences.PLAYER_VERTICAL_VELOCITY = 0;
+                                }
+                            });
+                    break;
+                case W:
+                    units
+                            .forEach(unit -> {
+                                if(unit.getType().equals(Preferences.SpriteType.PLAYER.toString())){
+                                    if(Preferences.PLAYER_VERTICAL_VELOCITY >= 0){
+                                        Preferences.PLAYER_VERTICAL_VELOCITY = -3;
+                                    }
+                                }
+                            });
+                    break;
+                case S:
+                    units
+                            .forEach(unit -> {
+                                if(unit.getType().equals(Preferences.SpriteType.PLAYER.toString())){
+                                    if(Preferences.PLAYER_VERTICAL_VELOCITY < 0){
+                                        Preferences.PLAYER_VERTICAL_VELOCITY = 3;
                                     }
                                 }
                             });
@@ -145,9 +173,56 @@ public class GameWindow extends Scene implements WindowController {
                                 if (unit.getType().equals(Preferences.SpriteType.PLAYER.toString())
                                 ) {
                                     try {
-                                        Sprite shot = unit.fire();
-                                        units.add(shot);
-                                        root.getChildren().add(shot);
+                                        if(Preferences.CURRENT_KILLS >= 0 && Preferences.CURRENT_KILLS < 10){
+                                            Sprite shot = unit.fire();
+                                            units.add(shot);
+                                            root.getChildren().add(shot);
+                                        } else if(Preferences.CURRENT_KILLS >= 10 && Preferences.CURRENT_KILLS < 18){
+                                            if(Preferences.CURRENT_KILLS == 10){
+                                                level.setText("LEVEL: 2");
+                                                level.setBackground(
+                                                        new Background(
+                                                                new BackgroundFill(
+                                                                        Color.SILVER,
+                                                                        CornerRadii.EMPTY,
+                                                                        Insets.EMPTY
+                                                                )
+                                                        )
+                                                );
+                                            }
+                                            Sprite center = unit.fire();
+                                            Sprite left = unit.fire();
+                                            center.setTranslateX(center.getTranslateX() + 15);
+                                            left.setTranslateX(left.getTranslateX() - 15);
+                                            units.add(center);
+                                            units.add(left);
+                                            root.getChildren().addAll(center, left);
+                                        } else if(Preferences.CURRENT_KILLS >= 18){
+                                            if(Preferences.CURRENT_KILLS == 18){
+                                                level.setText("LEVEL: 3");
+                                                level.setBackground(
+                                                        new Background(
+                                                                new BackgroundFill(
+                                                                        Color.GOLD,
+                                                                        CornerRadii.EMPTY,
+                                                                        Insets.EMPTY
+                                                                )
+                                                        )
+                                                );
+                                            }
+                                            level.setText("LEVEL:3");
+                                            Sprite left = unit.fire();
+                                            Sprite center = unit.fire();
+                                            Sprite right = unit.fire();
+                                            left.setTranslateX(left.getTranslateX() - 15);
+                                            center.setTranslateY(right.getTranslateY() - 10);
+                                            right.setTranslateX(center.getTranslateX() + 15);
+                                            units.add(left);
+                                            units.add(center);
+                                            units.add(right);
+                                            root.getChildren().addAll(left, center, right);
+                                        }
+
                                     } catch (AttributeInUseException exception) {
                                         exception.printStackTrace();
                                     }
@@ -155,35 +230,35 @@ public class GameWindow extends Scene implements WindowController {
                             });
                     break;
                 case ESCAPE:
-                    animationTimer.handle(0);
+                    scenes.set(
+                            5,
+                            new PauseWindow(
+                                    new Group(),
+                                    Preferences.WINDOW_WIDTH,
+                                    Preferences.WINDOW_HEIGHT
+                            )
+                    );
                     ((PauseWindow) scenes.get(5)).display(primaryStage, scenes);
+                    ((PauseWindow) scenes.get(5)).initKeyActions(primaryStage, scenes);
                     primaryStage.setScene(scenes.get(5));
+                    break;
+                default:
                     break;
             }
         });
     }
 
-    private void runVsComputer(Stage primaryStage, List<Scene> scenes) {
+    private void run(Stage primaryStage, List<Scene> scenes) {
         animationTimer = new AnimationTimer() {
             @Override
             public void handle(long now) {
-                updateComputerVersion(primaryStage, scenes);
+                update(primaryStage, scenes);
             }
         };
         animationTimer.start();
     }
 
-    private void runVsHuman(Stage primaryStage, List<Scene> scenes) {
-        animationTimer = new AnimationTimer() {
-            @Override
-            public void handle(long now) {
-                updateHumanVersion(primaryStage, scenes);
-            }
-        };
-        animationTimer.start();
-    }
-
-    private void updateComputerVersion(Stage primaryStage, List<Scene> scenes) {
+    private void update(Stage primaryStage, List<Scene> scenes) {
         /*
             Moving all the aliens line
          */
@@ -225,21 +300,77 @@ public class GameWindow extends Scene implements WindowController {
         /*
             Generating the index of the alien, who will make a shot
          */
-        int alienShootingChance = (int) (Math.random() * Preferences.ALIEN_AMOUNT_PER_LEVEL[Preferences.CURRENT_ROUND]);
+        int alienShootingChance = (int) (Math.random() * aliensAmount);
         /*
             Make the alien fire, generated above
          */
         try {
             int chance = (int) (Math.random() * Preferences.ROCKET_LAUNCH_CHANCE_RANGE);
             if (chance <= Preferences.ROCKET_LAUNCH_CHANCE) {
-                Sprite shot = units
-                        .stream()
-                        .filter(unit -> unit.getType().equals(Preferences.SpriteType.ALIEN.toString()))
-                        .collect(Collectors.toList())
-                        .get(alienShootingChance)
-                        .fire();
-                units.add(shot);
-                root.getChildren().add(shot);
+                if(Preferences.CURRENT_ROUND <= 1){
+                    Sprite shot = units
+                            .stream()
+                            .filter(unit -> unit.getType().equals(Preferences.SpriteType.ALIEN.toString()))
+                            .collect(Collectors.toList())
+                            .get(alienShootingChance)
+                            .fire();
+                    units.add(shot);
+                    root.getChildren().add(shot);
+                } else if(Preferences.CURRENT_ROUND <= 3){
+                    Sprite left = units
+                            .stream()
+                            .filter(unit -> unit.getType().equals(Preferences.SpriteType.ALIEN.toString()))
+                            .collect(Collectors.toList())
+                            .get(alienShootingChance)
+                            .fire();
+                    Sprite right = units
+                            .stream()
+                            .filter(unit -> unit.getType().equals(Preferences.SpriteType.ALIEN.toString()))
+                            .collect(Collectors.toList())
+                            .get(alienShootingChance)
+                            .fire();
+                    left.setTranslateX(left.getTranslateX() - 15);
+                    right.setTranslateX(right.getTranslateX() + 15);
+                    units.add(left);
+                    units.add(right);
+                    root.getChildren().addAll(
+                            left,
+                            right
+                    );
+                } else {
+                    Sprite left = units
+                            .stream()
+                            .filter(unit -> unit.getType().equals(Preferences.SpriteType.ALIEN.toString()))
+                            .collect(Collectors.toList())
+                            .get(alienShootingChance)
+                            .fire();
+                    Sprite center = units
+                            .stream()
+                            .filter(unit -> unit.getType().equals(Preferences.SpriteType.ALIEN.toString()))
+                            .collect(Collectors.toList())
+                            .get(alienShootingChance)
+                            .fire();
+                    Sprite right = units
+                            .stream()
+                            .filter(unit -> unit.getType().equals(Preferences.SpriteType.ALIEN.toString()))
+                            .collect(Collectors.toList())
+                            .get(alienShootingChance)
+                            .fire();
+
+                    left.setTranslateX(left.getTranslateX() - 15);
+                    center.setTranslateY(center.getTranslateY() + 10);
+                    right.setTranslateX(right.getTranslateX() + 15);
+
+                    units.add(left);
+                    units.add(center);
+                    units.add(right);
+
+                    root.getChildren().addAll(
+                            left,
+                            center,
+                            right
+                    );
+                }
             }
         } catch (AttributeInUseException exception) {
             exception.printStackTrace();
@@ -256,27 +387,26 @@ public class GameWindow extends Scene implements WindowController {
                                             unit.die();
                                             units.remove(hero);
                                             units.remove(unit);
+
                                             animationTimer.stop();
                                             scenes.set(
                                                     1,
                                                     new LossWindow(
-                                                            new Group(),
+                                                            new StackPane(),
                                                             Preferences.WINDOW_WIDTH,
                                                             Preferences.WINDOW_HEIGHT
                                                     )
                                             );
                                             ((LossWindow) scenes.get(1)).display(primaryStage, scenes);
+                                            ((LossWindow) scenes.get(1)).initKeyActions(primaryStage, scenes);
                                             primaryStage.setScene(scenes.get(1));
+                                            animationTimer.stop();
                                         }
                                     }
                                 });
                     }
                     if (unit.getType().equals(Preferences.SpriteType.PLAYER_ROCKET.toString())) {
-                        try {
-                            unit.moveUp();
-                        } catch (AttributeInUseException exception) {
-                            exception.printStackTrace();
-                        }
+                        unit.moveUp();
                         units
                                 .forEach(alien -> {
                                     if (alien.getType().equals(Preferences.SpriteType.ALIEN.toString())) {
@@ -287,7 +417,7 @@ public class GameWindow extends Scene implements WindowController {
                                             units.remove(unit);
                                             Preferences.CURRENT_KILLS += 1;
                                             kills.setText("KILLS: " + Preferences.CURRENT_KILLS);
-                                            int aliensAmount = (int) units
+                                            aliensAmount = (int) units
                                                     .stream()
                                                     .filter(specie -> specie.getType().equals(Preferences.SpriteType.ALIEN.toString()))
                                                     .count();
@@ -318,25 +448,47 @@ public class GameWindow extends Scene implements WindowController {
                                     unit.die();
                                     units.remove(sprite);
                                     units.remove(unit);
+
                                     animationTimer.stop();
                                     scenes.set(
                                             1,
                                             new LossWindow(
-                                                    new Group(),
+                                                    new StackPane(),
                                                     Preferences.WINDOW_WIDTH,
                                                     Preferences.WINDOW_HEIGHT
                                             )
                                     );
                                     ((LossWindow) scenes.get(1)).display(primaryStage, scenes);
+                                    ((LossWindow) scenes.get(1)).initKeyActions(primaryStage, scenes);
                                     primaryStage.setScene(scenes.get(1));
+                                    animationTimer.stop();
                                 }
                             }
                         });
                     }
                 });
 
+//        units
+//                .forEach(unit -> {
+//                    if(unit.getType().equals(Preferences.SpriteType.PLAYER.toString())){
+//                        if(!unit.isAlive()){
+//                            scenes.set(
+//                                    1,
+//                                    new LossWindow(
+//                                            new Group(),
+//                                            Preferences.WINDOW_WIDTH,
+//                                            Preferences.WINDOW_HEIGHT
+//                                    )
+//                            );
+//                            ((LossWindow) scenes.get(1)).display(primaryStage, scenes);
+//                            ((LossWindow) scenes.get(1)).initKeyActions(primaryStage, scenes);
+//                            primaryStage.setScene(scenes.get(1));
+//                        }
+//                    }
+//                });
+
         if (Preferences.IS_ROUND_WON) {
-            if (Preferences.CURRENT_ROUND == Preferences.MAX_ROUND) {
+            if (Preferences.CURRENT_ROUND == Preferences.MAX_ROUND - 1) {
                 Preferences.IS_GAME_WON = true;
             } else {
                 Preferences.CURRENT_ROUND += 1;
@@ -350,7 +502,9 @@ public class GameWindow extends Scene implements WindowController {
                         )
                 );
                 ((GameWindow) scenes.get(0)).display(primaryStage, scenes);
+                ((GameWindow) scenes.get(0)).initKeyActions(primaryStage, scenes);
                 primaryStage.setScene(scenes.get(0));
+                animationTimer.stop();
             }
         }
 
@@ -364,201 +518,9 @@ public class GameWindow extends Scene implements WindowController {
                     )
             );
             ((WinWindow) scenes.get(7)).display(primaryStage, scenes);
+            ((WinWindow) scenes.get(7)).initKeyActions(primaryStage, scenes);
             primaryStage.setScene(scenes.get(7));
-        }
-
-        root.getChildren().removeIf(predicate -> {
-            if(predicate instanceof Sprite){
-                Sprite sprite = (Sprite) predicate;
-                return !sprite.isAlive();
-            } else {
-                return false;
-            }
-        });
-    }
-
-    private void updateHumanVersion(Stage primaryStage, List<Scene> scenes) {
-        /*
-            Moving all the aliens line
-         */
-        units
-                .forEach(unit -> {
-                    if (unit.getType().equals(Preferences.SpriteType.ALIEN.toString())) {
-                        unit.move();
-                    }
-                });
-
-        units
-                .forEach(unit -> {
-                    if (unit.getType().equals(Preferences.SpriteType.PLAYER.toString())) {
-                        unit.move();
-                    }
-                });
-        /*
-            Meteor appearing chance
-         */
-        int meteorAppearingChance = (int) (Math.random() * Preferences.METEOR_APPEAR_RANGE);
-        if (meteorAppearingChance <= Preferences.METEOR_APPEAR_CHANCE) {
-            Sprite meteor = new Sprite(
-                    (int) (Math.random() * Preferences.WINDOW_WIDTH),
-                    -Preferences.METEOR_HEIGHT,
-                    Preferences.METEOR_WIDTH,
-                    Preferences.METEOR_HEIGHT,
-                    Preferences.SpriteType.METEOR.toString(),
-                    "file:resources/models/effects/meteor.png"
-            );
-            units.add(meteor);
-            root.getChildren().add(meteor);
-        }
-        units
-                .forEach(unit -> {
-                    if(unit.getType().equals(Preferences.SpriteType.METEOR.toString())){
-                        unit.moveDown();
-                    }
-                });
-        /*
-            Generating the index of the alien, who will make a shot
-         */
-        int alienShootingChance = (int) (Math.random() * Preferences.ALIEN_AMOUNT_PER_LEVEL[Preferences.CURRENT_ROUND]);
-        /*
-            Make the alien fire, generated above
-         */
-        try {
-            int chance = (int) (Math.random() * Preferences.ROCKET_LAUNCH_CHANCE_RANGE);
-            if (chance <= Preferences.ROCKET_LAUNCH_CHANCE) {
-                Sprite shot = units
-                        .stream()
-                        .filter(unit -> unit.getType().equals(Preferences.SpriteType.ALIEN.toString()))
-                        .collect(Collectors.toList())
-                        .get(alienShootingChance)
-                        .fire();
-                units.add(shot);
-                root.getChildren().add(shot);
-            }
-        } catch (AttributeInUseException exception) {
-            exception.printStackTrace();
-        }
-        units
-                .forEach(unit -> {
-                    if (unit.getType().equals(Preferences.SpriteType.ALIEN_ROCKET.toString())) {
-                        unit.moveDown();
-                        units
-                                .forEach(hero -> {
-                                    if (hero.getType().equals(Preferences.SpriteType.PLAYER.toString())) {
-                                        if (unit.intersects(hero)) {
-                                            hero.die();
-                                            unit.die();
-                                            units.remove(hero);
-                                            units.remove(unit);
-                                            animationTimer.stop();
-                                            scenes.set(
-                                                    1,
-                                                    new LossWindow(
-                                                            new Group(),
-                                                            Preferences.WINDOW_WIDTH,
-                                                            Preferences.WINDOW_HEIGHT
-                                                    )
-                                            );
-                                            ((LossWindow) scenes.get(1)).display(primaryStage, scenes);
-                                            primaryStage.setScene(scenes.get(1));
-                                        }
-                                    }
-                                });
-                    }
-                    if (unit.getType().equals(Preferences.SpriteType.PLAYER_ROCKET.toString())) {
-                        try {
-                            unit.moveUp();
-                        } catch (AttributeInUseException exception) {
-                            exception.printStackTrace();
-                        }
-                        units
-                                .forEach(alien -> {
-                                    if (alien.getType().equals(Preferences.SpriteType.ALIEN.toString())) {
-                                        if (unit.intersects(alien)) {
-                                            alien.die();
-                                            unit.die();
-                                            units.remove(alien);
-                                            units.remove(unit);
-                                            Preferences.CURRENT_KILLS += 1;
-                                            kills.setText("KILLS: " + Preferences.CURRENT_KILLS);
-                                            int aliensAmount = (int) units
-                                                    .stream()
-                                                    .filter(specie -> specie.getType().equals(Preferences.SpriteType.ALIEN.toString()))
-                                                    .count();
-                                            if (aliensAmount == 0) {
-                                                Preferences.IS_ROUND_WON = true;
-                                            }
-                                        }
-                                    }
-                                    if(alien.getType().equals(Preferences.SpriteType.ALIEN_ROCKET.toString())){
-                                        if (unit.intersects(alien)) {
-                                            alien.die();
-                                            unit.die();
-                                            units.remove(alien);
-                                            units.remove(unit);
-                                        }
-                                    }
-                                });
-                    }
-                });
-
-        units
-                .forEach(unit -> {
-                    if(unit.getType().equals(Preferences.SpriteType.METEOR.toString())){
-                        units.forEach(sprite -> {
-                            if(sprite.getType().equals(Preferences.SpriteType.PLAYER.toString())){
-                                if(unit.intersects(sprite)){
-                                    sprite.die();
-                                    unit.die();
-                                    units.remove(sprite);
-                                    units.remove(unit);
-                                    animationTimer.stop();
-                                    scenes.set(
-                                            1,
-                                            new LossWindow(
-                                                    new Group(),
-                                                    Preferences.WINDOW_WIDTH,
-                                                    Preferences.WINDOW_HEIGHT
-                                            )
-                                    );
-                                    ((LossWindow) scenes.get(1)).display(primaryStage, scenes);
-                                    primaryStage.setScene(scenes.get(1));
-                                }
-                            }
-                        });
-                    }
-                });
-
-        if (Preferences.IS_ROUND_WON) {
-            if (Preferences.CURRENT_ROUND == Preferences.MAX_ROUND) {
-                Preferences.IS_GAME_WON = true;
-            } else {
-                Preferences.CURRENT_ROUND += 1;
-                Preferences.IS_ROUND_WON = false;
-                scenes.set(
-                        0,
-                        new GameWindow(
-                                new BorderPane(),
-                                Preferences.WINDOW_WIDTH,
-                                Preferences.WINDOW_HEIGHT
-                        )
-                );
-                ((GameWindow) scenes.get(0)).display(primaryStage, scenes);
-                primaryStage.setScene(scenes.get(0));
-            }
-        }
-
-        if (Preferences.IS_GAME_WON) {
-            scenes.set(
-                    7,
-                    new WinWindow(
-                            new Group(),
-                            Preferences.WINDOW_WIDTH,
-                            Preferences.WINDOW_HEIGHT
-                    )
-            );
-            ((WinWindow) scenes.get(7)).display(primaryStage, scenes);
-            primaryStage.setScene(scenes.get(7));
+            animationTimer.stop();
         }
 
         root.getChildren().removeIf(predicate -> {

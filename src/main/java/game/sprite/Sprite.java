@@ -2,7 +2,7 @@ package game.sprite;
 
 import game.Preferences;
 import javafx.scene.image.ImageView;
-import javafx.scene.paint.Color;
+
 import javax.naming.directory.AttributeInUseException;
 
 public class Sprite extends ImageView
@@ -39,26 +39,27 @@ public class Sprite extends ImageView
         }
 
         if(type.toString().equals(Preferences.SpriteType.PLAYER.toString())){
-            setTranslateX(getTranslateX() + Preferences.PLAYER_VELOCITY);
+            setTranslateX(getTranslateX() + Preferences.PLAYER_HORIZONTAL_VELOCITY);
             if(getTranslateX() > Preferences.WINDOW_WIDTH - Preferences.PLAYER_WIDTH){
                 setTranslateX(-Preferences.PLAYER_WIDTH);
             }
             if(getTranslateX() < -Preferences.PLAYER_WIDTH){
                 setTranslateX(Preferences.WINDOW_WIDTH - Preferences.PLAYER_WIDTH);
             }
+
+            setTranslateY(getTranslateY() + Preferences.PLAYER_VERTICAL_VELOCITY);
+            if(getTranslateY() <= 0 || getTranslateY() >= Preferences.WINDOW_HEIGHT - Preferences.PLAYER_HEIGHT){
+                setTranslateY(Preferences.WINDOW_HEIGHT - Preferences.PLAYER_HEIGHT);
+            }
         }
     }
 
-    public void moveUp() throws AttributeInUseException {
+    public void moveUp() {
         if(type.toString().equals(Preferences.SpriteType.PLAYER_ROCKET.toString())) {
             setTranslateY(getTranslateY() - Preferences.ROCKET_VELOCITY);
             if (getTranslateY() < 0) {
                 isAlive = false;
             }
-        } else {
-            throw new AttributeInUseException(
-                    "Error! This unit cannot use move up function. Try another one!"
-            );
         }
     }
 
