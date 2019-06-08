@@ -1,6 +1,7 @@
 package game;
 
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 public class Preferences {
@@ -56,7 +57,7 @@ public class Preferences {
     /*
         Main panel buttons and location
      */
-    public static final int MAIN_BUTTON_WIDTH = 250;
+    public static final int MAIN_BUTTON_WIDTH = 280;
     public static final int MAIN_BUTTON_HEIGHT = 30;
     public static final int MAIN_BUTTON_DIFFERENCE = WINDOW_HEIGHT / 6;
     public static final int MAIN_BUTTON_X = (WINDOW_WIDTH - MAIN_BUTTON_WIDTH) / 2;
@@ -78,10 +79,24 @@ public class Preferences {
     public static boolean IS_VERSUS_HUMAN = false;
     public static boolean iS_FIRST_PLAYED = false;
     public static final int MAX_ROUND = 5;
-    public static int CURRENT_ROUND = 4;
+    public static int CURRENT_ROUND = 0;
     public static boolean IS_ROUND_WON = false;
     public static boolean IS_GAME_WON = false;
     public static int CURRENT_KILLS = 0;
 
+    /*
+        Font for objects on the screen (labels)
+     */
     public static Font FONT = Font.loadFont(("file:FONT/15211.ttf"), 30);
+    public static Font TITLE_FONT = Font.loadFont(("file:FONT/15211.ttf"), 54);
+
+    /*
+        Window Colors
+     */
+    public static final Color WIN_WINDOW_COLOR = Color.rgb(255, 255, 225);
+    public static final Color LOSS_WINDOW_COLOR = Color.rgb(0, 0, 0);
+    public static final Color MAIN_WINDOW_COLOR = Color.rgb(50,50,100);
+    public static final Color OPTIONS_WINDOW_COLOR = Color.rgb(150,50,100);
+    public static final Color MODE_WINDOW_COLOR = Color.rgb(50,50,100);
+
 }

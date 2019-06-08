@@ -32,11 +32,10 @@ public class MainWindow extends Scene implements WindowController{
 
     private Label madeByBefore;
     private Label madeByAfter;
-    private double madeByWidth = 200;
     private double madeBySpeed = 1.0;
 
     public MainWindow(Parent root, double width, double height) {
-        super(root, width, height, Color.rgb(50,50,100));
+        super(root, width, height, Preferences.MAIN_WINDOW_COLOR);
         this.root = (Group) root;
     }
 
@@ -52,7 +51,7 @@ public class MainWindow extends Scene implements WindowController{
             exception.printStackTrace();
         }
 
-        BackgroundFill backgroundFill
+        BackgroundFill fill
                 = new BackgroundFill(
                 Color.rgb(50,50,100),
                 CornerRadii.EMPTY,
@@ -62,13 +61,11 @@ public class MainWindow extends Scene implements WindowController{
         title = new Label(
                 "Space Defenders"
         );
-        title.setFont(new Font("Arial", 42));
+        title.setFont(Preferences.TITLE_FONT);
         title.setTextFill(Color.WHITE);
-        title.setBackground(new Background(backgroundFill));
+        title.setBackground(new Background(fill));
         title.setLayoutX((Preferences.WINDOW_WIDTH) / 2 - titleWidth);
         title.setLayoutY(50);
-
-        run();
 
         gotoMode = ButtonConstructor.construct(
                 "Choose mode",
@@ -123,9 +120,9 @@ public class MainWindow extends Scene implements WindowController{
         madeByBefore = new Label(
             "Made by Dan Orel & Olia Perch"
         );
-        madeByBefore.setFont(new Font("Arial", 24));
+        madeByBefore.setFont(Preferences.FONT);
         madeByBefore.setTextFill(Color.WHITE);
-        madeByBefore.setBackground(new Background(backgroundFill));
+        madeByBefore.setBackground(new Background(fill));
         madeByBefore.setLayoutX(0);
         madeByBefore.setLayoutY(Preferences.WINDOW_HEIGHT - 50);
 
@@ -133,9 +130,9 @@ public class MainWindow extends Scene implements WindowController{
         madeByAfter = new Label(
                 "Made by Dan Orel & Olia Perch"
         );
-        madeByAfter.setFont(new Font("Arial", 24));
+        madeByAfter.setFont(Preferences.FONT);
         madeByAfter.setTextFill(Color.WHITE);
-        madeByAfter.setBackground(new Background(backgroundFill));
+        madeByAfter.setBackground(new Background(fill));
         madeByAfter.setLayoutX(-Preferences.WINDOW_WIDTH);
         madeByAfter.setLayoutY(Preferences.WINDOW_HEIGHT - 50);
 
@@ -148,6 +145,7 @@ public class MainWindow extends Scene implements WindowController{
                 madeByAfter
         );
 
+        run();
     }
 
     @Override
@@ -191,7 +189,7 @@ public class MainWindow extends Scene implements WindowController{
     }
 
     private void update(){
-        if(title.getLayoutX() == (Preferences.WINDOW_WIDTH - titleWidth - 120) || title.getLayoutX() == 0){
+        if(title.getLayoutX() == (Preferences.WINDOW_WIDTH - titleWidth - 320) || title.getLayoutX() == 0){
             titleSpeed = -titleSpeed;
         }
         title.setLayoutX(title.getLayoutX() + titleSpeed);

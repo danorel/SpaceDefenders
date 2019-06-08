@@ -14,7 +14,6 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 
@@ -93,7 +92,8 @@ public class GameWindow extends Scene implements WindowController {
 
         root.setTop(round);
         root.setBottom(level);
-        root.setCenter(kills);
+        root.setRight(kills);
+        kills.setTranslateY(kills.getTranslateY() - 40);
 
         initSprites();
         initKeyActions(primaryStage, scenes);

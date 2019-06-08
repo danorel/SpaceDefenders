@@ -1,5 +1,6 @@
 package game.tools;
 
+import game.Preferences;
 import javafx.scene.control.Button;
 
 public class ButtonConstructor {
@@ -7,7 +8,8 @@ public class ButtonConstructor {
         Button button = new Button(title);
         button.setDefaultButton(true);
         button.setPrefSize(width, height);
-        button.setStyle("-fx-font: 26 arial; -fx-base: #b6a7c9;");
+//        button.setStyle("-fx-font: 26 arial; -fx-base: #b6a7c9;");
+        button.setFont(Preferences.FONT);
         button.setLayoutX(x);
         button.setLayoutY(y);
         return button;

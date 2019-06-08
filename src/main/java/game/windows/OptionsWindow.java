@@ -21,7 +21,7 @@ public class OptionsWindow extends Scene implements WindowController{
     private FileChooser skinChooser;
 
     public OptionsWindow(Parent root, double width, double height) {
-        super(root, width, height, Color.rgb(150,50,100));
+        super(root, width, height, Preferences.OPTIONS_WINDOW_COLOR);
         this.root = (Group) root;
     }
 

@@ -5,14 +5,11 @@ import game.Preferences;
 import game.tools.ButtonConstructor;
 import javafx.animation.AnimationTimer;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -23,12 +20,12 @@ import java.util.List;
 @SuppressWarnings("ALL")
 public class LossWindow extends Scene implements WindowController {
     private StackPane root;
-    private Button replay, toMainMenu;
-    private Label score, failed, prePress, afterPress;
+    private Button replay, back;
+    private Label score, failed, passsedMessage, commingMessage;
     private AnimationTimer animationTimer;
 
     public LossWindow(Parent root, double width, double height) {
-        super(root, width, height, Color.rgb(0, 0, 0));
+        super(root, width, height, Preferences.MODE_WINDOW_COLOR);
         this.root = (StackPane) root;
     }
 
@@ -80,13 +77,13 @@ public class LossWindow extends Scene implements WindowController {
             primaryStage.setScene(scenes.get(0));
         });
 
-        toMainMenu = ButtonConstructor.construct(
+        back = ButtonConstructor.construct(
                 "Main menu",
                 Preferences.MAIN_BUTTON_WIDTH,
                 Preferences.MAIN_BUTTON_HEIGHT,
                 Preferences.MAIN_BUTTON_X,
                 Preferences.MAIN_BUTTON_Y + Preferences.MAIN_BUTTON_DIFFERENCE);
-        toMainMenu.setOnAction(event -> {
+        back.setOnAction(event -> {
             scenes.set(
                     2,
                     new MainWindow(
@@ -100,39 +97,39 @@ public class LossWindow extends Scene implements WindowController {
             primaryStage.setScene(scenes.get(2));
         });
 
-        BackgroundFill backgroundFill
+        BackgroundFill fill
                 = new BackgroundFill(
-                Color.rgb(0, 255, 255),
-                CornerRadii.EMPTY,
-                Insets.EMPTY
+                    Color.rgb(0, 0, 0),
+                    CornerRadii.EMPTY,
+                    Insets.EMPTY
         );
 
-        prePress = new Label("Press TAB to start a new game");
-        prePress.setFont(new Font("Arial", 24));
-        prePress.setBackground(new Background(backgroundFill));
+        passsedMessage = new Label("Press TAB to start a new game");
+        passsedMessage.setTextFill(Color.BLACK);
+        passsedMessage.setFont(Preferences.FONT);
+        passsedMessage.setBackground(new Background(fill));
 
-        afterPress = new Label("Press TAB to start a new game");
-        afterPress.setFont(new Font("Arial", 24));
-        afterPress.setBackground(new Background(backgroundFill));
-
-        root.setAlignment(Pos.CENTER);
+        commingMessage = new Label("Press TAB to start a new game");
+        commingMessage.setTextFill(Color.BLACK);
+        commingMessage.setFont(Preferences.FONT);
+        commingMessage.setBackground(new Background(fill));
 
         score.setTranslateY(score.getTranslateY() - 1.5 * Preferences.MAIN_BUTTON_DIFFERENCE);
 
-        toMainMenu.setTranslateY(toMainMenu.getTranslateY() + Preferences.MAIN_BUTTON_DIFFERENCE);
+        back.setTranslateY(back.getTranslateY() + Preferences.MAIN_BUTTON_DIFFERENCE);
 
-        prePress.setTranslateX(0);
-        prePress.setTranslateY(Preferences.WINDOW_HEIGHT - 50);
+        passsedMessage.setTranslateX(0);
+        passsedMessage.setTranslateY(Preferences.WINDOW_HEIGHT - 50);
 
-        afterPress.setTranslateX(-Preferences.WINDOW_WIDTH);
-        afterPress.setTranslateY(Preferences.WINDOW_HEIGHT - 50);
+        commingMessage.setTranslateX(-Preferences.WINDOW_WIDTH);
+        commingMessage.setTranslateY(Preferences.WINDOW_HEIGHT - 50);
 
         root.getChildren().addAll(
                 score,
                 replay,
-                toMainMenu,
-                prePress,
-                afterPress
+                back,
+                passsedMessage,
+                commingMessage
         );
 
         run();
@@ -168,6 +165,8 @@ public class LossWindow extends Scene implements WindowController {
                     ((MainWindow) scenes.get(2)).initKeyActions(primaryStage, scenes);
                     primaryStage.setScene(scenes.get(2));
                     break;
+                case ENTER:
+                    break;
                 default:
                     break;
             }
@@ -184,14 +183,14 @@ public class LossWindow extends Scene implements WindowController {
     }
 
     private void update() {
-//        if(prePress.getTranslateX() >= Preferences.WINDOW_WIDTH + 200){
-//            prePress.setTranslateX(-Preferences.WINDOW_WIDTH);
+//        if(passsedMessage.getTranslateX() >= Preferences.WINDOW_WIDTH + 200){
+//            passsedMessage.setTranslateX(-Preferences.WINDOW_WIDTH);
 //        }
-//        if(afterPress.getTranslateX() >= Preferences.WINDOW_WIDTH + 200){
-//            afterPress.setTranslateX(-Preferences.WINDOW_WIDTH);
+//        if(commingMessage.getTranslateX() >= Preferences.WINDOW_WIDTH + 200){
+//            commingMessage.setTranslateX(-Preferences.WINDOW_WIDTH);
 //        }
-        prePress.setTranslateX(prePress.getTranslateX() + 1);
-        afterPress.setTranslateX(afterPress.getTranslateX() + 1);
+        passsedMessage.setTranslateX(passsedMessage.getTranslateX() + 1);
+        commingMessage.setTranslateX(commingMessage.getTranslateX() + 1);
     }
 
     @Override

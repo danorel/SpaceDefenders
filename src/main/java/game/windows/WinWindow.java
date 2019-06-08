@@ -17,21 +17,18 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.util.List;
 
 public class WinWindow extends Scene implements WindowController{
     private Group root;
-    private Button replay, toMainMenu;
+    private Button replay, back;
     private Label won;
-    private Label prePress, afterPress;
-
-    private AnimationTimer animationTimer;
+    private Label passedMessaged, commingMessage;
 
     public WinWindow(Parent root, double width, double height) {
-        super(root, width, height, Color.rgb(255, 255, 225));
+        super(root, width, height, Preferences.WIN_WINDOW_COLOR);
         this.root = (Group) root;
     }
 
@@ -54,16 +51,17 @@ public class WinWindow extends Scene implements WindowController{
                             Preferences.WINDOW_HEIGHT
                     ));
             ((GameWindow) scenes.get(0)).display(primaryStage, scenes);
+            ((GameWindow) scenes.get(0)).initKeyActions(primaryStage, scenes);
             primaryStage.setScene(scenes.get(0));
         });
 
-        toMainMenu = ButtonConstructor.construct(
+        back = ButtonConstructor.construct(
                 "Main Menu",
                 Preferences.MAIN_BUTTON_WIDTH,
                 Preferences.MAIN_BUTTON_HEIGHT,
                 Preferences.MAIN_BUTTON_X,
                 Preferences.MAIN_BUTTON_Y + Preferences.MAIN_BUTTON_DIFFERENCE);
-        toMainMenu.setOnAction(event -> {
+        back.setOnAction(event -> {
             scenes.set(
                     2,
                     new MainWindow(
@@ -73,29 +71,30 @@ public class WinWindow extends Scene implements WindowController{
                     )
             );
             ((MainWindow) scenes.get(2)).display(primaryStage, scenes);
+            ((MainWindow) scenes.get(2)).initKeyActions(primaryStage, scenes);
             primaryStage.setScene(scenes.get(2));
         });
 
-        BackgroundFill backgroundFill
+        BackgroundFill fill
                 = new BackgroundFill(
                 Color.rgb(255, 255, 225),
                 CornerRadii.EMPTY,
                 Insets.EMPTY
         );
 
-        prePress = new Label("Press TAB to start a new game");
-        prePress.setFont(new Font("Arial", 24));
-        prePress.setBackground(new Background(backgroundFill));
-        prePress.setTranslateX(0);
-        prePress.setTranslateY(Preferences.WINDOW_HEIGHT - 50);
+        passedMessaged = new Label("Press TAB to start a new game");
+        passedMessaged.setTextFill(Color.BLACK);
+        passedMessaged.setFont(Preferences.FONT);
+        passedMessaged.setBackground(new Background(fill));
+        passedMessaged.setTranslateX(0);
+        passedMessaged.setTranslateY(Preferences.WINDOW_HEIGHT - 50);
 
-        afterPress = new Label("Press TAB to start a new game");
-        afterPress.setFont(new Font("Arial", 24));
-        afterPress.setBackground(new Background(backgroundFill));
-        afterPress.setTranslateX(-Preferences.WINDOW_WIDTH);
-        afterPress.setTranslateY(Preferences.WINDOW_HEIGHT - 50);
-
-        run();
+        commingMessage = new Label("Press TAB to start a new game");
+        commingMessage.setTextFill(Color.BLACK);
+        commingMessage.setFont(Preferences.FONT);
+        commingMessage.setBackground(new Background(fill));
+        commingMessage.setTranslateX(-Preferences.WINDOW_WIDTH);
+        commingMessage.setTranslateY(Preferences.WINDOW_HEIGHT - 50);
 
         Image image = new Image(
                 "file:resources/messages/game-won.png"
@@ -107,9 +106,17 @@ public class WinWindow extends Scene implements WindowController{
         root.getChildren().addAll(
                 won,
                 replay,
-                toMainMenu,
-                prePress
+                back,
+                passedMessaged,
+                commingMessage
         );
+
+        Preferences.IS_ROUND_WON = false;
+        Preferences.IS_GAME_WON = false;
+        Preferences.CURRENT_KILLS  = 0;
+        Preferences.CURRENT_ROUND  = 0;
+
+        run();
     }
 
     @Override
@@ -126,6 +133,7 @@ public class WinWindow extends Scene implements WindowController{
                             )
                     );
                     ((MainWindow) scenes.get(0)).display(primaryStage, scenes);
+                    ((MainWindow) scenes.get(0)).initKeyActions(primaryStage, scenes);
                     primaryStage.setScene(scenes.get(0));
                     break;
                 case ESCAPE:
@@ -137,8 +145,11 @@ public class WinWindow extends Scene implements WindowController{
                                     Preferences.WINDOW_HEIGHT
                             )
                     );
-                    ((WinWindow) scenes.get(2)).display(primaryStage, scenes);
+                    ((MainWindow) scenes.get(2)).display(primaryStage, scenes);
+                    ((MainWindow) scenes.get(2)).initKeyActions(primaryStage, scenes);
                     primaryStage.setScene(scenes.get(2));
+                    break;
+                case ENTER:
                     break;
                 default:
                     break;
@@ -147,7 +158,7 @@ public class WinWindow extends Scene implements WindowController{
     }
 
     private void run(){
-        animationTimer = new AnimationTimer() {
+        AnimationTimer animationTimer = new AnimationTimer() {
             @Override
             public void handle(long now) {
                 update();
@@ -156,14 +167,14 @@ public class WinWindow extends Scene implements WindowController{
     }
 
     private void update() {
-        if(prePress.getTranslateX() >= Preferences.WINDOW_WIDTH + 200){
-            prePress.setTranslateX(-Preferences.WINDOW_WIDTH);
+        if(passedMessaged.getTranslateX() >= Preferences.WINDOW_WIDTH + 200){
+            passedMessaged.setTranslateX(-Preferences.WINDOW_WIDTH);
         }
-        if(afterPress.getTranslateX() >= Preferences.WINDOW_WIDTH + 200){
-            afterPress.setTranslateX(-Preferences.WINDOW_WIDTH);
+        if(commingMessage.getTranslateX() >= Preferences.WINDOW_WIDTH + 200){
+            commingMessage.setTranslateX(-Preferences.WINDOW_WIDTH);
         }
-        prePress.setTranslateX(prePress.getTranslateX() + 1);
-        afterPress.setTranslateX(afterPress.getTranslateX() + 1);
+        passedMessaged.setTranslateX(passedMessaged.getTranslateX() + 1);
+        commingMessage.setTranslateX(commingMessage.getTranslateX() + 1);
     }
 
     @Override

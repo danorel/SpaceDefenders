@@ -72,7 +72,7 @@ public class App extends Application {
         );
         scenes.add(PW);
 
-        StatsWindow SW = new StatsWindow(
+        ResultsWindow SW = new ResultsWindow(
                 new Group(),
                 Preferences.WINDOW_WIDTH,
                 Preferences.WINDOW_HEIGHT

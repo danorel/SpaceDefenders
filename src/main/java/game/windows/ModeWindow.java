@@ -19,14 +19,14 @@ public class ModeWindow extends Scene implements WindowController{
     private Button vsComputer, vsHuman, back;
 
     public ModeWindow(Parent root, double width, double height) {
-        super(root, width, height, Color.rgb(50,50,100));
+        super(root, width, height, Preferences.MODE_WINDOW_COLOR);
         this.root = (Group) root;
     }
 
     @Override
     public void display(Stage primaryStage, List<Scene> scenes) {
         vsComputer = ButtonConstructor.construct(
-                "Versus Computer",
+                "VS Computer",
                 Preferences.MAIN_BUTTON_WIDTH,
                 Preferences.MAIN_BUTTON_HEIGHT,
                 Preferences.MAIN_BUTTON_X,
@@ -47,14 +47,14 @@ public class ModeWindow extends Scene implements WindowController{
         });
 
         vsHuman = ButtonConstructor.construct(
-                "Versus Human",
+                "VS Human",
                 Preferences.MAIN_BUTTON_WIDTH,
                 Preferences.MAIN_BUTTON_HEIGHT,
                 Preferences.MAIN_BUTTON_X,
                 Preferences.MAIN_BUTTON_Y + Preferences.MAIN_BUTTON_DIFFERENCE
         );
         vsHuman.setOnAction(event -> {
-
+            Preferences.IS_VERSUS_HUMAN = true;
             scenes.set(
                     0,
                     new GameWindow(
