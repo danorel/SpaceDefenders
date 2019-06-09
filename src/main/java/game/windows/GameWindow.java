@@ -106,8 +106,6 @@ public class GameWindow extends Scene implements WindowController {
                 new Sprite(
                         Preferences.PLAYER_START_X,
                         Preferences.PLAYER_START_Y,
-                        Preferences.PLAYER_WIDTH,
-                        Preferences.PLAYER_HEIGHT,
                         Preferences.SpriteType.PLAYER.toString(),
                         Preferences.PLAYER_IMAGE.impl_getUrl()
                 )
@@ -283,8 +281,6 @@ public class GameWindow extends Scene implements WindowController {
             Sprite meteor = new Sprite(
                     (int) (Math.random() * Preferences.WINDOW_WIDTH),
                     -Preferences.METEOR_HEIGHT,
-                    Preferences.METEOR_WIDTH,
-                    Preferences.METEOR_HEIGHT,
                     Preferences.SpriteType.METEOR.toString(),
                     "file:resources/models/effects/meteor.png"
             );
@@ -487,8 +483,12 @@ public class GameWindow extends Scene implements WindowController {
 //                    }
 //                });
 
+        if(Preferences.CURRENT_ROUND >= Preferences.MAX_ROUND - 1){
+            Preferences.IS_ROUND_WON = true;
+        }
+
         if (Preferences.IS_ROUND_WON) {
-            if (Preferences.CURRENT_ROUND == Preferences.MAX_ROUND - 1) {
+            if (Preferences.CURRENT_ROUND >= Preferences.MAX_ROUND - 1) {
                 Preferences.IS_GAME_WON = true;
             } else {
                 Preferences.CURRENT_ROUND += 1;

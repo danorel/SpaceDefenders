@@ -77,9 +77,8 @@ public class Preferences {
         Game options
      */
     public static boolean IS_VERSUS_HUMAN = false;
-    public static boolean iS_FIRST_PLAYED = false;
     public static final int MAX_ROUND = 5;
-    public static int CURRENT_ROUND = 0;
+    public static int CURRENT_ROUND = 5;
     public static boolean IS_ROUND_WON = false;
     public static boolean IS_GAME_WON = false;
     public static int CURRENT_KILLS = 0;

@@ -2,7 +2,6 @@ package game.sprite;
 
 import game.Preferences;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,8 +37,6 @@ public class AlienStrategy {
                     new Sprite(
                             STEP - Preferences.ALIEN_WIDTH,
                             10 + Preferences.ALIEN_HEIGHT,
-                            Preferences.ALIEN_WIDTH,
-                            Preferences.ALIEN_HEIGHT,
                             Preferences.SpriteType.ALIEN.toString(),
                             "file:resources/models/plane_models/alien_models/ufo-1.png"
                     )
@@ -58,8 +55,6 @@ public class AlienStrategy {
                     new Sprite(
                             STEP - Preferences.ALIEN_WIDTH,
                             10 + Preferences.ALIEN_HEIGHT,
-                            Preferences.ALIEN_WIDTH,
-                            Preferences.ALIEN_HEIGHT,
                             Preferences.SpriteType.ALIEN.toString(), "file:resources/models/plane_models/alien_models/ufo-2.png"
                     )
             );
@@ -69,8 +64,6 @@ public class AlienStrategy {
                     new Sprite(
                             STEP - Preferences.ALIEN_WIDTH,
                             10 + 2 * Preferences.ALIEN_HEIGHT,
-                            Preferences.ALIEN_WIDTH,
-                            Preferences.ALIEN_HEIGHT,
                             Preferences.SpriteType.ALIEN.toString(),
                             "file:resources/models/plane_models/alien_models/ufo-2.png"
                     )
@@ -80,8 +73,6 @@ public class AlienStrategy {
                 new Sprite(
                         Preferences.PLAYER_START_X,
                         10 + 3 * Preferences.ALIEN_HEIGHT,
-                        Preferences.ALIEN_WIDTH,
-                        Preferences.ALIEN_HEIGHT,
                         Preferences.SpriteType.ALIEN.toString(),
                         "file:resources/models/plane_models/alien_models/ufo-2.png"
                 )
@@ -98,8 +89,6 @@ public class AlienStrategy {
                     new Sprite(
                             STEP - Preferences.ALIEN_WIDTH / 2,
                             10 + Preferences.ALIEN_HEIGHT,
-                            Preferences.ALIEN_WIDTH,
-                            Preferences.ALIEN_HEIGHT,
                             Preferences.SpriteType.ALIEN.toString(), "file:resources/models/plane_models/alien_models/ufo-3.png"
                     )
             );
@@ -109,8 +98,6 @@ public class AlienStrategy {
                     new Sprite(
                             STEP - Preferences.ALIEN_WIDTH / 2,
                             10 + 2 * Preferences.ALIEN_HEIGHT,
-                            Preferences.ALIEN_WIDTH,
-                            Preferences.ALIEN_HEIGHT,
                             Preferences.SpriteType.ALIEN.toString(),
                             "file:resources/models/plane_models/alien_models/ufo-3.png"
                     )
@@ -120,8 +107,6 @@ public class AlienStrategy {
                 new Sprite(
                         Preferences.WINDOW_WIDTH / 2  - Preferences.ALIEN_WIDTH / 2,
                         10 + 3 * Preferences.ALIEN_HEIGHT,
-                        Preferences.ALIEN_WIDTH,
-                        Preferences.ALIEN_HEIGHT,
                         Preferences.SpriteType.ALIEN.toString(),
                         "file:resources/models/plane_models/alien_models/ufo-3.png"
                 )
@@ -138,8 +123,6 @@ public class AlienStrategy {
                     new Sprite(
                             (STEP - Preferences.ALIEN_WIDTH),
                             alien % 2 == 0 ? 10 + Preferences.ALIEN_HEIGHT : 10 + 2 * Preferences.ALIEN_HEIGHT,
-                            Preferences.ALIEN_WIDTH,
-                            Preferences.ALIEN_HEIGHT,
                             Preferences.SpriteType.ALIEN.toString(),
                             "file:resources/models/plane_models/alien_models/ufo-4.png"
                     )
@@ -156,8 +139,6 @@ public class AlienStrategy {
                 new Sprite(
                         Preferences.ALIEN_START_X - Preferences.ALIEN_WIDTH / 2,
                         2 * Preferences.ALIEN_HEIGHT,
-                        Preferences.ALIEN_WIDTH,
-                        Preferences.ALIEN_HEIGHT,
                         Preferences.SpriteType.ALIEN.toString(),                           "file:resources/models/plane_models/alien_models/boss.png"
                 )
         );

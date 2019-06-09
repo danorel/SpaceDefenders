@@ -24,7 +24,7 @@ import java.util.List;
 public class WinWindow extends Scene implements WindowController{
     private Group root;
     private Button replay, back;
-    private Label won;
+//    private Label won;
     private Label passedMessaged, commingMessage;
 
     public WinWindow(Parent root, double width, double height) {
@@ -96,15 +96,19 @@ public class WinWindow extends Scene implements WindowController{
         commingMessage.setTranslateX(-Preferences.WINDOW_WIDTH);
         commingMessage.setTranslateY(Preferences.WINDOW_HEIGHT - 50);
 
+        /*
         Image image = new Image(
                 "file:resources/messages/game-won.png"
         );
         won = new Label(
                 "", new ImageView(image)
         );
+        */
+
+        run();
 
         root.getChildren().addAll(
-                won,
+//                won,
                 replay,
                 back,
                 passedMessaged,
@@ -115,8 +119,6 @@ public class WinWindow extends Scene implements WindowController{
         Preferences.IS_GAME_WON = false;
         Preferences.CURRENT_KILLS  = 0;
         Preferences.CURRENT_ROUND  = 0;
-
-        run();
     }
 
     @Override
@@ -126,14 +128,14 @@ public class WinWindow extends Scene implements WindowController{
                 case TAB:
                     scenes.set(
                             0,
-                            new MainWindow(
-                                    new Group(),
+                            new GameWindow(
+                                    new BorderPane(),
                                     Preferences.WINDOW_WIDTH,
                                     Preferences.WINDOW_HEIGHT
                             )
                     );
-                    ((MainWindow) scenes.get(0)).display(primaryStage, scenes);
-                    ((MainWindow) scenes.get(0)).initKeyActions(primaryStage, scenes);
+                    ((GameWindow) scenes.get(0)).display(primaryStage, scenes);
+                    ((GameWindow) scenes.get(0)).initKeyActions(primaryStage, scenes);
                     primaryStage.setScene(scenes.get(0));
                     break;
                 case ESCAPE:
@@ -164,13 +166,14 @@ public class WinWindow extends Scene implements WindowController{
                 update();
             }
         };
+        animationTimer.start();
     }
 
     private void update() {
-        if(passedMessaged.getTranslateX() >= Preferences.WINDOW_WIDTH + 200){
+        if(passedMessaged.getTranslateX() == Preferences.WINDOW_WIDTH){
             passedMessaged.setTranslateX(-Preferences.WINDOW_WIDTH);
         }
-        if(commingMessage.getTranslateX() >= Preferences.WINDOW_WIDTH + 200){
+        if(commingMessage.getTranslateX() == Preferences.WINDOW_WIDTH){
             commingMessage.setTranslateX(-Preferences.WINDOW_WIDTH);
         }
         passedMessaged.setTranslateX(passedMessaged.getTranslateX() + 1);

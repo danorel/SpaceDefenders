@@ -12,7 +12,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.util.List;
@@ -21,7 +20,7 @@ import java.util.List;
 public class LossWindow extends Scene implements WindowController {
     private StackPane root;
     private Button replay, back;
-    private Label score, failed, passsedMessage, commingMessage;
+    private Label score, failed, passedMessage, commingMessage;
     private AnimationTimer animationTimer;
 
     public LossWindow(Parent root, double width, double height) {
@@ -104,31 +103,29 @@ public class LossWindow extends Scene implements WindowController {
                     Insets.EMPTY
         );
 
-        passsedMessage = new Label("Press TAB to start a new game");
-        passsedMessage.setTextFill(Color.BLACK);
-        passsedMessage.setFont(Preferences.FONT);
-        passsedMessage.setBackground(new Background(fill));
+        passedMessage = new Label("Press TAB to start a new game");
+        passedMessage.setTextFill(Color.BLACK);
+        passedMessage.setFont(Preferences.FONT);
+        passedMessage.setBackground(new Background(fill));
+        passedMessage.setTranslateX(0);
+        passedMessage.setTranslateY(Preferences.WINDOW_HEIGHT - 50);
 
         commingMessage = new Label("Press TAB to start a new game");
         commingMessage.setTextFill(Color.BLACK);
         commingMessage.setFont(Preferences.FONT);
         commingMessage.setBackground(new Background(fill));
+        commingMessage.setTranslateX(-Preferences.WINDOW_WIDTH);
+        commingMessage.setTranslateY(Preferences.WINDOW_HEIGHT - 50);
 
         score.setTranslateY(score.getTranslateY() - 1.5 * Preferences.MAIN_BUTTON_DIFFERENCE);
 
         back.setTranslateY(back.getTranslateY() + Preferences.MAIN_BUTTON_DIFFERENCE);
 
-        passsedMessage.setTranslateX(0);
-        passsedMessage.setTranslateY(Preferences.WINDOW_HEIGHT - 50);
-
-        commingMessage.setTranslateX(-Preferences.WINDOW_WIDTH);
-        commingMessage.setTranslateY(Preferences.WINDOW_HEIGHT - 50);
-
         root.getChildren().addAll(
                 score,
                 replay,
                 back,
-                passsedMessage,
+                passedMessage,
                 commingMessage
         );
 
@@ -173,23 +170,25 @@ public class LossWindow extends Scene implements WindowController {
         });
     }
 
-    public void run(){
-        animationTimer = new AnimationTimer() {
+    private void run(){
+        AnimationTimer animationTimer = new AnimationTimer() {
             @Override
             public void handle(long now) {
                 update();
             }
         };
+        animationTimer.start();
     }
 
     private void update() {
-//        if(passsedMessage.getTranslateX() >= Preferences.WINDOW_WIDTH + 200){
-//            passsedMessage.setTranslateX(-Preferences.WINDOW_WIDTH);
-//        }
-//        if(commingMessage.getTranslateX() >= Preferences.WINDOW_WIDTH + 200){
-//            commingMessage.setTranslateX(-Preferences.WINDOW_WIDTH);
-//        }
-        passsedMessage.setTranslateX(passsedMessage.getTranslateX() + 1);
+        if(passedMessage.getTranslateX() == Preferences.WINDOW_WIDTH){
+            passedMessage.setTranslateX(-Preferences.WINDOW_WIDTH);
+        }
+        if(commingMessage.getTranslateX() == Preferences.WINDOW_WIDTH){
+            commingMessage.setTranslateX(-Preferences.WINDOW_WIDTH);
+        }
+
+        passedMessage.setTranslateX(passedMessage.getTranslateX() + 1);
         commingMessage.setTranslateX(commingMessage.getTranslateX() + 1);
     }
 

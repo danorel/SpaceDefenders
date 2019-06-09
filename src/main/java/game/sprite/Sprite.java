@@ -10,17 +10,13 @@ public class Sprite extends ImageView
     private boolean isAlive  = true;
     private double positionX = 0;
     private double positionY = 0;
-    private double width     = 0;
-    private double height    = 0;
     private StringBuilder type;
 
-    public Sprite(double positionX, double positionY, double width, double height, String type, String url){
+    public Sprite(double positionX, double positionY, String type, String url){
         super(url);
         this.type       = new StringBuilder(type);
         this.positionX  = positionX;
         this.positionY  = positionY;
-        this.width      = width;
-        this.height     = height;
         setTranslateX(this.positionX);
         setTranslateY(this.positionY);
     }
@@ -84,8 +80,6 @@ public class Sprite extends ImageView
             return new Sprite(
                     getTranslateX() + Preferences.ALIEN_WIDTH / 2 - Preferences.ROCKET_WIDTH / 2,
                     getTranslateY() + Preferences.ALIEN_HEIGHT + Preferences.ROCKET_HEIGHT,
-                    Preferences.ROCKET_WIDTH,
-                    Preferences.ROCKET_HEIGHT,
                     Preferences.SpriteType.ALIEN_ROCKET.toString(),
                     "file:resources/models/missles/rocket-1.png"
             );
@@ -93,8 +87,6 @@ public class Sprite extends ImageView
             return new Sprite(
                     getTranslateX() + Preferences.PLAYER_WIDTH / 2 - Preferences.ROCKET_WIDTH / 2,
                     getTranslateY() - Preferences.ROCKET_HEIGHT,
-                    Preferences.ROCKET_WIDTH,
-                    Preferences.ROCKET_HEIGHT,
                     Preferences.SpriteType.PLAYER_ROCKET.toString(),
                     "file:resources/models/missles/rocket-2.png"
             );

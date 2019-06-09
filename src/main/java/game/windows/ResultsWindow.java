@@ -3,8 +3,6 @@ package game.windows;
 import com.sun.javafx.binding.StringFormatter;
 import game.Preferences;
 import game.tools.ButtonConstructor;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Parent;
@@ -22,7 +20,7 @@ import java.util.List;
 
 public class ResultsWindow extends Scene implements WindowController {
     private Group root;
-    private Button resume, back;
+    private Button playOn, back;
     private Label score;
 
     public ResultsWindow(Parent root, double width, double height) {
@@ -52,13 +50,13 @@ public class ResultsWindow extends Scene implements WindowController {
             primaryStage.setScene(scenes.get(2));
         });
 
-        resume = ButtonConstructor.construct(
-                "Resume",
+        playOn = ButtonConstructor.construct(
+                "Continue",
                 Preferences.MAIN_BUTTON_WIDTH,
                 Preferences.MAIN_BUTTON_HEIGHT,
                 Preferences.MAIN_BUTTON_X,
                 Preferences.MAIN_BUTTON_Y + 2 * Preferences.MAIN_BUTTON_DIFFERENCE);
-        resume.setOnAction(event -> {
+        playOn.setOnAction(event -> {
             scenes.set(
                     0,
                     new GameWindow(
@@ -93,7 +91,7 @@ public class ResultsWindow extends Scene implements WindowController {
 
         root.getChildren().addAll(
                 score,
-                resume,
+                playOn,
                 back
         );
     }
