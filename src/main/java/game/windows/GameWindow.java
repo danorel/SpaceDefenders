@@ -383,20 +383,27 @@ public class GameWindow extends Scene implements WindowController {
                                             unit.die();
                                             units.remove(hero);
                                             units.remove(unit);
-
-                                            animationTimer.stop();
-                                            scenes.set(
-                                                    1,
-                                                    new LossWindow(
-                                                            new StackPane(),
-                                                            Preferences.WINDOW_WIDTH,
-                                                            Preferences.WINDOW_HEIGHT
-                                                    )
-                                            );
-                                            ((LossWindow) scenes.get(1)).display(primaryStage, scenes);
-                                            ((LossWindow) scenes.get(1)).initKeyActions(primaryStage, scenes);
-                                            primaryStage.setScene(scenes.get(1));
-                                            animationTimer.stop();
+                                            if(Preferences.IS_FP_PLAYED){
+                                                Preferences.IS_SP_PLAYED = true;
+                                                Preferences.IS_FP_PLAYED = false;
+                                            }
+                                            if(Preferences.IS_VERSUS_HUMAN && !Preferences.CONTINUE){
+                                                Preferences.IS_FP_PLAYED = true;
+                                            } else {
+                                                animationTimer.stop();
+                                                scenes.set(
+                                                        1,
+                                                        new LossWindow(
+                                                                new StackPane(),
+                                                                Preferences.WINDOW_WIDTH,
+                                                                Preferences.WINDOW_HEIGHT
+                                                        )
+                                                );
+                                                ((LossWindow) scenes.get(1)).display(primaryStage, scenes);
+                                                ((LossWindow) scenes.get(1)).initKeyActions(primaryStage, scenes);
+                                                primaryStage.setScene(scenes.get(1));
+                                                animationTimer.stop();
+                                            }
                                         }
                                     }
                                 });
@@ -444,20 +451,27 @@ public class GameWindow extends Scene implements WindowController {
                                     unit.die();
                                     units.remove(sprite);
                                     units.remove(unit);
-
-                                    animationTimer.stop();
-                                    scenes.set(
-                                            1,
-                                            new LossWindow(
-                                                    new StackPane(),
-                                                    Preferences.WINDOW_WIDTH,
-                                                    Preferences.WINDOW_HEIGHT
-                                            )
-                                    );
-                                    ((LossWindow) scenes.get(1)).display(primaryStage, scenes);
-                                    ((LossWindow) scenes.get(1)).initKeyActions(primaryStage, scenes);
-                                    primaryStage.setScene(scenes.get(1));
-                                    animationTimer.stop();
+                                    if(Preferences.IS_FP_PLAYED){
+                                        Preferences.IS_SP_PLAYED = true;
+                                        Preferences.IS_FP_PLAYED = false;
+                                    }
+                                    if(Preferences.IS_VERSUS_HUMAN && !Preferences.CONTINUE){
+                                        Preferences.IS_FP_PLAYED = true;
+                                    } else {
+                                        animationTimer.stop();
+                                        scenes.set(
+                                                1,
+                                                new LossWindow(
+                                                        new StackPane(),
+                                                        Preferences.WINDOW_WIDTH,
+                                                        Preferences.WINDOW_HEIGHT
+                                                )
+                                        );
+                                        ((LossWindow) scenes.get(1)).display(primaryStage, scenes);
+                                        ((LossWindow) scenes.get(1)).initKeyActions(primaryStage, scenes);
+                                        primaryStage.setScene(scenes.get(1));
+                                        animationTimer.stop();
+                                    }
                                 }
                             }
                         });
@@ -483,44 +497,101 @@ public class GameWindow extends Scene implements WindowController {
 //                    }
 //                });
 
-        if(Preferences.CURRENT_ROUND >= Preferences.MAX_ROUND - 1){
-            Preferences.IS_ROUND_WON = true;
-        }
+        if(Preferences.IS_VERSUS_HUMAN){
+            if (Preferences.IS_ROUND_WON) {
+                if (Preferences.CURRENT_ROUND >= Preferences.MAX_ROUND - 1) {
+                    Preferences.IS_GAME_WON = true;
+                    if (Preferences.IS_FP_PLAYED && !Preferences.CONTINUE) {
+                        Preferences.IS_SP_PLAYED = true;
+                        Preferences.IS_FP_PLAYED = false;
+                    }
+                    Preferences.IS_FP_PLAYED = true;
 
-        if (Preferences.IS_ROUND_WON) {
-            if (Preferences.CURRENT_ROUND >= Preferences.MAX_ROUND - 1) {
-                Preferences.IS_GAME_WON = true;
-            } else {
-                Preferences.CURRENT_ROUND += 1;
-                Preferences.IS_ROUND_WON = false;
-                scenes.set(
-                        0,
-                        new GameWindow(
-                                new BorderPane(),
+                } else {
+                    Preferences.CURRENT_ROUND += 1;
+                    Preferences.IS_ROUND_WON = false;
+                    scenes.set(
+                            0,
+                            new GameWindow(
+                                    new BorderPane(),
+                                    Preferences.WINDOW_WIDTH,
+                                    Preferences.WINDOW_HEIGHT
+                            )
+                    );
+                    ((GameWindow) scenes.get(0)).display(primaryStage, scenes);
+                    ((GameWindow) scenes.get(0)).initKeyActions(primaryStage, scenes);
+                    primaryStage.setScene(scenes.get(0));
+                    animationTimer.stop();
+                }
+            }
+
+            if(Preferences.IS_SP_PLAYED && Preferences.CONTINUE){
+                Preferences.SP_KILLS = Preferences.CURRENT_KILLS;
+                scenes.add(
+                        new WinnerWindow(
+                                new Group(),
                                 Preferences.WINDOW_WIDTH,
                                 Preferences.WINDOW_HEIGHT
                         )
                 );
-                ((GameWindow) scenes.get(0)).display(primaryStage, scenes);
-                ((GameWindow) scenes.get(0)).initKeyActions(primaryStage, scenes);
-                primaryStage.setScene(scenes.get(0));
+                ((WinnerWindow) scenes.get(8)).display(primaryStage, scenes);
+                ((WinnerWindow) scenes.get(8)).initKeyActions(primaryStage, scenes);
+                primaryStage.setScene(scenes.get(8));
                 animationTimer.stop();
             }
-        }
 
-        if (Preferences.IS_GAME_WON) {
-            scenes.set(
-                    7,
-                    new WinWindow(
-                            new Group(),
-                            Preferences.WINDOW_WIDTH,
-                            Preferences.WINDOW_HEIGHT
-                    )
-            );
-            ((WinWindow) scenes.get(7)).display(primaryStage, scenes);
-            ((WinWindow) scenes.get(7)).initKeyActions(primaryStage, scenes);
-            primaryStage.setScene(scenes.get(7));
-            animationTimer.stop();
+            if (Preferences.IS_FP_PLAYED && !Preferences.CONTINUE){
+                Preferences.FP_KILLS = Preferences.CURRENT_KILLS;
+                scenes.set(
+                        6,
+                        new ResultsWindow(
+                                new Group(),
+                                Preferences.WINDOW_WIDTH,
+                                Preferences.WINDOW_HEIGHT
+                        )
+                );
+                ((ResultsWindow) scenes.get(6)).display(primaryStage, scenes);
+                ((ResultsWindow) scenes.get(6)).initKeyActions(primaryStage, scenes);
+                primaryStage.setScene(scenes.get(6));
+                animationTimer.stop();
+            }
+
+        } else {
+            if (Preferences.IS_ROUND_WON) {
+                if (Preferences.CURRENT_ROUND >= Preferences.MAX_ROUND - 1) {
+                    Preferences.IS_GAME_WON = true;
+                } else {
+                    Preferences.CURRENT_ROUND += 1;
+                    Preferences.IS_ROUND_WON = false;
+                    scenes.set(
+                            0,
+                            new GameWindow(
+                                    new BorderPane(),
+                                    Preferences.WINDOW_WIDTH,
+                                    Preferences.WINDOW_HEIGHT
+                            )
+                    );
+                    ((GameWindow) scenes.get(0)).display(primaryStage, scenes);
+                    ((GameWindow) scenes.get(0)).initKeyActions(primaryStage, scenes);
+                    primaryStage.setScene(scenes.get(0));
+                    animationTimer.stop();
+                }
+            }
+
+            if (Preferences.IS_GAME_WON) {
+                scenes.set(
+                        7,
+                        new WinWindow(
+                                new Group(),
+                                Preferences.WINDOW_WIDTH,
+                                Preferences.WINDOW_HEIGHT
+                        )
+                );
+                ((WinWindow) scenes.get(7)).display(primaryStage, scenes);
+                ((WinWindow) scenes.get(7)).initKeyActions(primaryStage, scenes);
+                primaryStage.setScene(scenes.get(7));
+                animationTimer.stop();
+            }
         }
 
         root.getChildren().removeIf(predicate -> {

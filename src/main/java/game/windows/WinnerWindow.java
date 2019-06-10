@@ -3,74 +3,60 @@ package game.windows;
 import com.sun.javafx.binding.StringFormatter;
 import game.Preferences;
 import game.tools.ButtonConstructor;
+import javafx.animation.AnimationTimer;
+import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.util.List;
 
-public class ModeWindow extends Scene implements WindowController{
+public class WinnerWindow extends Scene implements WindowController {
     private Group root;
-    private Button vsComputer, vsHuman, back;
+    private Button replay, back;
+    private Label won;
+    private Label passedMessaged, commingMessage;
 
-    public ModeWindow(Parent root, double width, double height) {
-        super(root, width, height, Preferences.MODE_WINDOW_COLOR);
+    public WinnerWindow(Parent root, double width, double height) {
+        super(root, width, height, Preferences.WIN_WINDOW_COLOR);
         this.root = (Group) root;
     }
 
     @Override
     public void display(Stage primaryStage, List<Scene> scenes) {
-        vsComputer = ButtonConstructor.construct(
-                "VS Computer",
-                Preferences.MAIN_BUTTON_WIDTH,
-                Preferences.MAIN_BUTTON_HEIGHT,
-                Preferences.MAIN_BUTTON_X,
-                Preferences.MAIN_BUTTON_Y
-        );
-        vsComputer.setOnAction(event -> {
-            Preferences.IS_VERSUS_HUMAN = false;
-            scenes.set(
-                    0,
-                    new GameWindow(
-                            new BorderPane(),
-                            Preferences.WINDOW_WIDTH,
-                            Preferences.WINDOW_HEIGHT
-                    )
-            );
-            ((GameWindow) scenes.get(0)).display(primaryStage, scenes);
-            ((GameWindow) scenes.get(0)).initKeyActions(primaryStage, scenes);
-            primaryStage.setScene(scenes.get(0));
-        });
+        Preferences.IS_FP_PLAYED = false;
+        Preferences.IS_SP_PLAYED = false;
 
-        vsHuman = ButtonConstructor.construct(
-                "VS Human",
+        replay = ButtonConstructor.construct(
+                "Replay",
                 Preferences.MAIN_BUTTON_WIDTH,
                 Preferences.MAIN_BUTTON_HEIGHT,
                 Preferences.MAIN_BUTTON_X,
                 Preferences.MAIN_BUTTON_Y + Preferences.MAIN_BUTTON_DIFFERENCE
         );
-        vsHuman.setOnAction(event -> {
-            Preferences.IS_VERSUS_HUMAN = true;
+        replay.setOnAction(event -> {
             scenes.set(
                     0,
                     new GameWindow(
                             new BorderPane(),
                             Preferences.WINDOW_WIDTH,
                             Preferences.WINDOW_HEIGHT
-                    )
-            );
+                    ));
             ((GameWindow) scenes.get(0)).display(primaryStage, scenes);
             ((GameWindow) scenes.get(0)).initKeyActions(primaryStage, scenes);
             primaryStage.setScene(scenes.get(0));
         });
 
         back = ButtonConstructor.construct(
-                "Back",
+                "Main Menu",
                 Preferences.MAIN_BUTTON_WIDTH,
                 Preferences.MAIN_BUTTON_HEIGHT,
                 Preferences.MAIN_BUTTON_X,
@@ -89,18 +75,64 @@ public class ModeWindow extends Scene implements WindowController{
             primaryStage.setScene(scenes.get(2));
         });
 
-        root.getChildren().addAll(
-                vsComputer,
-                vsHuman,
-                back
+        BackgroundFill fill
+                = new BackgroundFill(
+                Color.rgb(255, 255, 225),
+                CornerRadii.EMPTY,
+                Insets.EMPTY
         );
+
+        won = new Label();
+        String winner = Preferences.FP_KILLS > Preferences.SP_KILLS ? "FIRST PLAYER WINS" : "SECOND PLAYER WINS";
+        won.setText(winner + "\n" + "WINNER KILLS:" + (Preferences.FP_KILLS > Preferences.SP_KILLS ? Preferences.FP_KILLS : Preferences.SP_KILLS) + "\n" + "DEFEATED PLAYER KILLS:" + (Preferences.FP_KILLS > Preferences.SP_KILLS ? Preferences.SP_KILLS : Preferences.FP_KILLS));
+        won.setFont(Preferences.FONT);
+        won.setBackground(
+                new Background(
+                        new BackgroundFill(
+                                Color.GOLD,
+                                CornerRadii.EMPTY,
+                                Insets.EMPTY
+                        )
+                )
+        );
+        won.setTranslateX(Preferences.WINDOW_WIDTH / 2 - 200);
+        won.setTranslateY(40);
+
+        passedMessaged = new Label("Press TAB to start a new game");
+        passedMessaged.setTextFill(Color.BLACK);
+        passedMessaged.setFont(Preferences.FONT);
+        passedMessaged.setBackground(new Background(fill));
+        passedMessaged.setTranslateX(0);
+        passedMessaged.setTranslateY(Preferences.WINDOW_HEIGHT - 50);
+
+        commingMessage = new Label("Press TAB to start a new game");
+        commingMessage.setTextFill(Color.BLACK);
+        commingMessage.setFont(Preferences.FONT);
+        commingMessage.setBackground(new Background(fill));
+        commingMessage.setTranslateX(-Preferences.WINDOW_WIDTH);
+        commingMessage.setTranslateY(Preferences.WINDOW_HEIGHT - 50);
+
+        run();
+
+        root.getChildren().addAll(
+                won,
+                replay,
+                back,
+                passedMessaged,
+                commingMessage
+        );
+
+        Preferences.IS_ROUND_WON = false;
+        Preferences.IS_GAME_WON = false;
+        Preferences.CURRENT_KILLS  = 0;
+        Preferences.CURRENT_ROUND  = 0;
     }
 
     @Override
     public void initKeyActions(Stage primaryStage, List<Scene> scenes) {
         setOnKeyPressed(event -> {
             switch (event.getCode()){
-                case ENTER:
+                case TAB:
                     scenes.set(
                             0,
                             new GameWindow(
@@ -126,10 +158,33 @@ public class ModeWindow extends Scene implements WindowController{
                     ((MainWindow) scenes.get(2)).initKeyActions(primaryStage, scenes);
                     primaryStage.setScene(scenes.get(2));
                     break;
+                case ENTER:
+                    break;
                 default:
                     break;
             }
         });
+    }
+
+    private void run(){
+        AnimationTimer animationTimer = new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                update();
+            }
+        };
+        animationTimer.start();
+    }
+
+    private void update() {
+        if(passedMessaged.getTranslateX() == Preferences.WINDOW_WIDTH){
+            passedMessaged.setTranslateX(-Preferences.WINDOW_WIDTH);
+        }
+        if(commingMessage.getTranslateX() == Preferences.WINDOW_WIDTH){
+            commingMessage.setTranslateX(-Preferences.WINDOW_WIDTH);
+        }
+        passedMessaged.setTranslateX(passedMessaged.getTranslateX() + 1);
+        commingMessage.setTranslateX(commingMessage.getTranslateX() + 1);
     }
 
     @Override

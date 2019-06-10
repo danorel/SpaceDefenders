@@ -77,12 +77,14 @@ public class Preferences {
         Game options
      */
     public static boolean IS_VERSUS_HUMAN = false;
+    public static boolean IS_FP_PLAYED = false;
+    public static boolean IS_SP_PLAYED = false;
+    public static boolean CONTINUE = false;
     public static final int MAX_ROUND = 5;
-    public static int CURRENT_ROUND = 5;
+    public static int CURRENT_ROUND = 0;
     public static boolean IS_ROUND_WON = false;
     public static boolean IS_GAME_WON = false;
     public static int CURRENT_KILLS = 0;
-
     /*
         Font for objects on the screen (labels)
      */
@@ -97,5 +99,9 @@ public class Preferences {
     public static final Color MAIN_WINDOW_COLOR = Color.rgb(50,50,100);
     public static final Color OPTIONS_WINDOW_COLOR = Color.rgb(150,50,100);
     public static final Color MODE_WINDOW_COLOR = Color.rgb(50,50,100);
-
+    /*
+        Second player score
+     */
+    public static int FP_KILLS = 0;
+    public static int SP_KILLS = 0;
 }

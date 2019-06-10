@@ -30,12 +30,36 @@ public class ResultsWindow extends Scene implements WindowController {
 
     @Override
     public void display(Stage primaryStage, List<Scene> scenes){
+        playOn = ButtonConstructor.construct(
+                "Continue",
+                Preferences.MAIN_BUTTON_WIDTH,
+                Preferences.MAIN_BUTTON_HEIGHT,
+                Preferences.MAIN_BUTTON_X,
+                Preferences.MAIN_BUTTON_Y + Preferences.MAIN_BUTTON_DIFFERENCE);
+        playOn.setOnAction(event -> {
+            Preferences.CONTINUE = true;
+            Preferences.CURRENT_KILLS = 0;
+            Preferences.CURRENT_ROUND = 0;
+            Preferences.IS_VERSUS_HUMAN = true;
+            scenes.set(
+                    0,
+                    new GameWindow(
+                            new BorderPane(),
+                            Preferences.WINDOW_WIDTH,
+                            Preferences.WINDOW_HEIGHT
+                    )
+            );
+            ((GameWindow) scenes.get(0)).display(primaryStage, scenes);
+            ((GameWindow) scenes.get(0)).initKeyActions(primaryStage, scenes);
+            primaryStage.setScene(scenes.get(0));
+        });
+
         back = ButtonConstructor.construct(
                 "Back",
                 Preferences.MAIN_BUTTON_WIDTH,
                 Preferences.MAIN_BUTTON_HEIGHT,
                 Preferences.MAIN_BUTTON_X,
-                Preferences.MAIN_BUTTON_Y + Preferences.MAIN_BUTTON_DIFFERENCE);
+                Preferences.MAIN_BUTTON_Y + 2 * Preferences.MAIN_BUTTON_DIFFERENCE);
         back.setOnAction(event -> {
             scenes.set(
                     2,
@@ -50,26 +74,6 @@ public class ResultsWindow extends Scene implements WindowController {
             primaryStage.setScene(scenes.get(2));
         });
 
-        playOn = ButtonConstructor.construct(
-                "Continue",
-                Preferences.MAIN_BUTTON_WIDTH,
-                Preferences.MAIN_BUTTON_HEIGHT,
-                Preferences.MAIN_BUTTON_X,
-                Preferences.MAIN_BUTTON_Y + 2 * Preferences.MAIN_BUTTON_DIFFERENCE);
-        playOn.setOnAction(event -> {
-            scenes.set(
-                    0,
-                    new GameWindow(
-                            new BorderPane(),
-                            Preferences.WINDOW_WIDTH,
-                            Preferences.WINDOW_HEIGHT
-                    )
-            );
-            ((GameWindow) scenes.get(0)).display(primaryStage, scenes);
-            ((GameWindow) scenes.get(0)).initKeyActions(primaryStage, scenes);
-            primaryStage.setScene(scenes.get(0));
-        });
-
         int level = 1;
         if(Preferences.CURRENT_KILLS >= 10 && Preferences.CURRENT_KILLS < 18){
             level = 2;
@@ -77,7 +81,7 @@ public class ResultsWindow extends Scene implements WindowController {
             level = 3;
         }
         score = new Label();
-        score.setText("ROUND SURVIVED: " + String.valueOf(Preferences.CURRENT_ROUND + 1) + "\n" + "ALIENS KILLED: " + Preferences.CURRENT_KILLS + "\n" + "LEVEL ACQUIRED: " + level);
+        score.setText("FIRST PLAYER STATS\nROUND SURVIVED: " + String.valueOf(Preferences.CURRENT_ROUND + 1) + "\n" + "ALIENS KILLED: " + Preferences.CURRENT_KILLS + "\n" + "LEVEL ACQUIRED: " + level);
         score.setFont(Preferences.FONT);
         score.setBackground(
                 new Background(
@@ -88,6 +92,8 @@ public class ResultsWindow extends Scene implements WindowController {
                         )
                 )
         );
+        score.setTranslateX(Preferences.WINDOW_WIDTH / 2 - 170);
+        score.setTranslateY(40);
 
         root.getChildren().addAll(
                 score,
